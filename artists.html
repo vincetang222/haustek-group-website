@@ -15,6 +15,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Haustek">
 <meta property="og:title" content="Nghệ sĩ hợp tác — Haustek">
+<meta property="og:description" content="Những nghệ sĩ đã cùng Haustek làm nhạc — producer, DJ, VJ, songwriter và vocalist trong nước lẫn ngoài nước.">
 <meta property="og:url" content="https://haustek-group.com/artists">
 <meta property="og:locale" content="vi_VN">
 <meta name="twitter:card" content="summary_large_image">
@@ -52,8 +53,14 @@ img{max-width:100%;display:block}
 @keyframes blink{50%{opacity:.25}}
 .nav-right{display:flex;align-items:center;gap:14px}
 .lang-toggle{font-family:var(--mono);font-size:11px;letter-spacing:.1em;background:none;border:0;color:var(--concrete);
-  text-transform:uppercase;transition:color .2s;padding:6px 2px;cursor:pointer}
+  text-transform:uppercase;transition:color .2s;cursor:pointer;
+  min-width:44px;min-height:44px;padding:0 8px;margin:-9px -8px}   /* vùng bấm 44×44; margin âm giữ nguyên chiều cao thanh điều hướng */
 .lang-toggle:hover{color:var(--paper)}
+/* Link "bỏ qua điều hướng" cho người dùng bàn phím / trình đọc màn hình —
+   ẩn khỏi màn hình, chỉ hiện khi được focus bằng phím Tab. Giống legal.html. */
+.skip{position:absolute;left:-9999px;top:0;background:var(--red);color:var(--paper);padding:14px 22px;z-index:999;
+  font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;border-radius:0 0 10px 0}
+.skip:focus{left:0}
 .nav .back{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--concrete);text-transform:uppercase}
 .nav .back:hover{color:var(--paper)}
 
@@ -208,6 +215,8 @@ footer{padding:40px var(--gut);border-top:1px solid var(--line);background:#0606
   justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;
   letter-spacing:.1em;color:var(--concrete);text-transform:uppercase}
 footer a:hover{color:var(--paper)}
+/* link chân trang chỉ cao ~14px — nới vùng bấm cho ngón tay, margin âm giữ bố cục */
+footer a{display:inline-block;padding:7px 0;margin:-7px 0}
 
 .rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
@@ -218,6 +227,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
 </style>
 </head>
 <body>
+<a class="skip" href="#main" data-i18n="skip">Bỏ qua điều hướng, tới nội dung chính</a>
 
 <header class="nav">
   <a class="logo" href="/" aria-label="Haustek">
@@ -371,6 +381,8 @@ l-1242 0 -30 29 -29 29 0 745 c0 768 1 796 40 817 12 6 374 10 984 10 929 0
   </div>
 </header>
 
+<main id="main">
+
 <section class="hero">
   <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
   <p class="kicker"><i>●</i><span data-i18n="kicker">Nghệ sĩ · từ 2017</span></p>
@@ -399,6 +411,8 @@ l-1242 0 -30 29 -29 29 0 745 c0 768 1 796 40 817 12 6 374 10 984 10 929 0
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
   </a>
 </div>
+
+</main>
 
 <footer>
   <span>© 2026 Haustek · Los Angeles → Việt Nam · Since 2017</span>
@@ -495,6 +509,7 @@ const ARTISTS = [
 const I18N={
   vi:{
     _title:"Nghệ sĩ hợp tác — Haustek",
+    skip:"Bỏ qua điều hướng, tới nội dung chính",
     back:"← Về trang chủ", kicker:"Nghệ sĩ · từ 2017",
     h1:'<span class="ln">Những người</span> <span class="ln">đã <em>cùng làm nhạc.</em></span>',
     lead:"Producer, DJ, VJ, songwriter, vocalist — người Việt trong nước và ngoài nước. Đây là những cái tên đã đi qua phòng thu, sàn diễn và các bản phát hành của Haustek.",
@@ -509,6 +524,7 @@ const I18N={
   },
   en:{
     _title:"Collaborating artists — Haustek",
+    skip:"Skip navigation, go to main content",
     back:"← Back to home", kicker:"Artists · since 2017",
     h1:'<span class="ln">The people</span> <span class="ln">we have <em>made music with.</em></span>',
     lead:"Producers, DJs, VJs, songwriters, vocalists — Vietnamese, at home and abroad. These are the names that have passed through Haustek's studio, stages and releases.",
@@ -730,12 +746,19 @@ function setLang(l){
   document.documentElement.lang=l;
   document.title=d._title;
   langBtn.textContent = l==="vi" ? "EN" : "VI";
+  langBtn.setAttribute('aria-label', l==="vi" ? "Switch to English" : "Chuyển sang tiếng Việt");
   renderFilters(); renderGrid();
 }
-langBtn.addEventListener('click',()=>setLang(lang==="vi"?"en":"vi"));
+/* Nhớ ngôn ngữ giữa các trang (khoá hk_lang dùng chung với trang chủ,
+   sự kiện, nghệ sĩ, metadata). try/catch: chế độ ẩn danh hoặc trình duyệt
+   chặn lưu trữ thì localStorage ném lỗi — khi đó cứ về tiếng Việt. */
+function loadLang(){try{return localStorage.getItem('hk_lang')==='en'?'en':'vi';}catch(e){return 'vi';}}
+function saveLang(l){try{localStorage.setItem('hk_lang',l);}catch(e){}}
+langBtn.addEventListener('click',()=>{const l=lang==="vi"?"en":"vi";saveLang(l);setLang(l);});
 
 renderFilters();
 renderGrid();
+if(loadLang()==='en')setLang('en');
 </script>
 </body>
 </html>

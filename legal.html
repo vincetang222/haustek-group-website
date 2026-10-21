@@ -96,7 +96,8 @@ td:first-child{color:var(--paper);width:32%;padding-right:18px}
 
 footer{padding:40px var(--gut);border-top:1px solid var(--line);background:#060608;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
   font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--concrete);text-transform:uppercase}
-footer a{color:var(--concrete);text-decoration:none}
+/* link chân trang chỉ cao ~14px — nới vùng bấm cho ngón tay, margin âm giữ bố cục */
+footer a{color:var(--concrete);text-decoration:none;display:inline-block;padding:7px 0;margin:-7px 0}
 footer a:hover{color:var(--paper)}
 
 a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:3px}
@@ -111,6 +112,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Haustek">
 <meta property="og:title" content="Thông tin pháp lý — Haustek">
+<meta property="og:description" content="Điều khoản sử dụng, chính sách quyền riêng tư, chính sách cookie và tuyên bố khả năng tiếp cận của Haustek.">
 <meta property="og:url" content="https://haustek-group.com/legal">
 <meta property="og:locale" content="vi_VN">
 <meta name="twitter:card" content="summary_large_image">

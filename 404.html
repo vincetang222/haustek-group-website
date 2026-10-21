@@ -73,7 +73,8 @@ p.lead{color:var(--concrete);font-size:15px;max-width:520px;margin-top:22px;text
 footer{padding:30px var(--gut);border-top:1px solid var(--line);background:#060608;
   font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--concrete);text-transform:uppercase;
   display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
-footer a{color:var(--concrete)}
+/* link chân trang chỉ cao ~14px — nới vùng bấm cho ngón tay, margin âm giữ bố cục */
+footer a{color:var(--concrete);display:inline-block;padding:7px 0;margin:-7px 0}
 footer a:hover{color:var(--paper)}
 
 a:focus-visible{outline:2px solid var(--red);outline-offset:3px}
@@ -239,7 +240,7 @@ l-1242 0 -30 29 -29 29 0 745 c0 768 1 796 40 817 12 6 374 10 984 10 929 0
   <p class="lead">Đường dẫn bạn vừa mở không tồn tại, hoặc đã được đổi sang chỗ khác. Thử một trong những lối dưới đây nhé.</p>
   <nav class="links" aria-label="Lối đi khác">
     <a class="primary" href="/">Trang chủ</a>
-    <a href="/#/events">Sự kiện</a>
+    <a href="/events">Sự kiện</a>
     <a href="/metadata">Gửi nhạc</a>
     <a href="/#stores">Cửa hàng nhạc số</a>
     <a href="mailto:mgmt@haustek-group.com">Liên hệ</a>

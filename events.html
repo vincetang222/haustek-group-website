@@ -15,6 +15,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Haustek">
 <meta property="og:title" content="Sự kiện — Haustek">
+<meta property="og:description" content="Những đêm mà Haustek đứng sau ánh đèn sân khấu — từ club nights ở Việt Nam đến chuỗi livestream quốc tế United We Stream Asia và Boiler Room.">
 <meta property="og:url" content="https://haustek-group.com/events">
 <meta property="og:locale" content="vi_VN">
 <meta name="twitter:card" content="summary_large_image">
@@ -52,8 +53,14 @@ img{max-width:100%;display:block}
 @keyframes blink{50%{opacity:.25}}
 .nav-right{display:flex;align-items:center;gap:14px}
 .lang-toggle{font-family:var(--mono);font-size:11px;letter-spacing:.1em;background:none;border:0;color:var(--concrete);
-  text-transform:uppercase;transition:color .2s;padding:6px 2px;cursor:pointer}
+  text-transform:uppercase;transition:color .2s;cursor:pointer;
+  min-width:44px;min-height:44px;padding:0 8px;margin:-9px -8px}   /* vùng bấm 44×44; margin âm giữ nguyên chiều cao thanh điều hướng */
 .lang-toggle:hover{color:var(--paper)}
+/* Link "bỏ qua điều hướng" cho người dùng bàn phím / trình đọc màn hình —
+   ẩn khỏi màn hình, chỉ hiện khi được focus bằng phím Tab. Giống legal.html. */
+.skip{position:absolute;left:-9999px;top:0;background:var(--red);color:var(--paper);padding:14px 22px;z-index:999;
+  font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;border-radius:0 0 10px 0}
+.skip:focus{left:0}
 .nav .back{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--concrete);text-transform:uppercase}
 .nav .back:hover{color:var(--paper)}
 
@@ -210,6 +217,8 @@ footer{padding:40px var(--gut);border-top:1px solid var(--line);background:#0606
   justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;
   letter-spacing:.1em;color:var(--concrete);text-transform:uppercase}
 footer a:hover{color:var(--paper)}
+/* link chân trang chỉ cao ~14px — nới vùng bấm cho ngón tay, margin âm giữ bố cục */
+footer a{display:inline-block;padding:7px 0;margin:-7px 0}
 
 .rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
@@ -420,6 +429,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
 </style>
 </head>
 <body>
+<a class="skip" href="#main" data-i18n="skip">Bỏ qua điều hướng, tới nội dung chính</a>
 
 <header class="nav">
   <a class="logo" href="/" aria-label="Haustek">
@@ -572,6 +582,8 @@ l-1242 0 -30 29 -29 29 0 745 c0 768 1 796 40 817 12 6 374 10 984 10 929 0
     <a class="back" href="/" data-i18n="back">← Về trang chủ</a>
   </div>
 </header>
+
+<main id="main">
 
 <section class="hero">
   <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -830,6 +842,8 @@ l-1242 0 -30 29 -29 29 0 745 c0 768 1 796 40 817 12 6 374 10 984 10 929 0
   <button class="faq-more" id="faqMore" type="button" data-i18n="fq_more">Xem thêm câu hỏi</button>
 </section>
 
+</main>
+
 <footer>
   <span>© 2026 Haustek · Việt Nam · Since 2017</span>
   <span><a href="/">Trang chủ</a> · <a href="/artists">Nghệ sĩ</a> · <a href="/legal">Pháp lý</a></span>
@@ -938,6 +952,7 @@ const SET_GROUPS = [
 const I18N={
   vi:{
     _title:"Sự kiện — Haustek",
+    skip:"Bỏ qua điều hướng, tới nội dung chính",
     back:"← Về trang chủ", kicker:"Sự kiện · từ 2017",
     h1:'<span class="ln">Những đêm Haustek</span> <span class="ln"><em>đứng sau ánh đèn sân khấu.</em></span>',
     lead:"Từ những đêm techno nhỏ ở Sài Gòn đến các chuỗi livestream khắp châu Á, Haustek luôn có mặt phía sau — dựng sân khấu, chạy chương trình, đưa buổi diễn lên sóng. Bấm vào một tiết mục để xem lại.",
@@ -1011,6 +1026,7 @@ const I18N={
   },
   en:{
     _title:"Events — Haustek",
+    skip:"Skip navigation, go to main content",
     back:"← Back to home", kicker:"Events · since 2017",
     h1:'<span class="ln">The nights Haustek</span> <span class="ln"><em>stood behind the stage lights.</em></span>',
     lead:"From small techno nights in Saigon to livestream series across Asia, Haustek has always been the one behind it — building the stage, running the show, putting it on air. Tap a card to watch.",
@@ -1280,20 +1296,26 @@ function setLang(l){
   document.documentElement.lang=l;
   document.title=d._title;
   langBtn.textContent = l==="vi" ? "EN" : "VI";
+  langBtn.setAttribute('aria-label', l==="vi" ? "Switch to English" : "Chuyển sang tiếng Việt");
   renderGrid();
   renderSetGroups();
   mountRails();                                   /* nhóm video vừa dựng lại → gắn lại thanh tiến độ */
   if(window.__faqApply)window.__faqApply();       /* nhãn nút "Xem thêm câu hỏi" theo ngôn ngữ */
   if(window.__archRender)window.__archRender();   /* nhãn nút "Xem thêm"/"Tất cả" theo ngôn ngữ */
 }
-langBtn.addEventListener('click',()=>setLang(lang==="vi"?"en":"vi"));
+/* Nhớ ngôn ngữ giữa các trang (khoá hk_lang dùng chung với trang chủ,
+   sự kiện, nghệ sĩ, metadata). try/catch: chế độ ẩn danh hoặc trình duyệt
+   chặn lưu trữ thì localStorage ném lỗi — khi đó cứ về tiếng Việt. */
+function loadLang(){try{return localStorage.getItem('hk_lang')==='en'?'en':'vi';}catch(e){return 'vi';}}
+function saveLang(l){try{localStorage.setItem('hk_lang',l);}catch(e){}}
+langBtn.addEventListener('click',()=>{const l=lang==="vi"?"en":"vi";saveLang(l);setLang(l);});
 
 renderGrid();
 renderSetGroups();
 /* Đổ nội dung tiếng Việt ngay khi tải: các khối mới (FAQ, venue) lấy chữ
    từ bảng I18N chứ không viết cứng trong HTML, nên phải chạy một lượt
    setLang thì mới có chữ — không thì khối hiện ra trống trơn. */
-setLang("vi");
+setLang(loadLang());
 
 /* ===================== DẢI VUỐT NGANG (chỉ mobile) =====================
    Trên màn hẹp, khối đầu bảng quốc tế và các nhóm video chuyển thành dải
