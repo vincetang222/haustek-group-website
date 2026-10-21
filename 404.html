@@ -28,6 +28,13 @@
 .lost h1{font-size:clamp(38px,6.4vw,92px);max-width:14ch;margin:18px 0 22px}
 .lost .lead{max-width:46ch}
 .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+/* trường sóng 3D phủ cả màn hình (assets/field.js) — vẽ được thì giấu vòng SVG tĩnh */
+.lost .field{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block;opacity:0;transition:opacity 1.2s var(--ease)}
+.lost.gl-on .field{opacity:.85}
+.lost.gl-on>.ripple{display:none}
+.lost.gl-on::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,rgba(10,10,13,.85),rgba(10,10,13,.25) 60%,transparent)}
+.lost .wrap{pointer-events:none}
+.lost .wrap a{pointer-events:auto}
 </style>
 </head>
 <body>
@@ -64,7 +71,8 @@
   </div>
 </div>
 
-<main id="main" class="lost">
+<main id="main" class="lost" data-field>
+  <canvas class="field" aria-hidden="true"></canvas>
   <svg class="ripple" viewBox="0 0 1000 1000" aria-hidden="true">
     <circle cx="500" cy="500" r="110" stroke-opacity=".14"/>
     <circle cx="500" cy="500" r="210" stroke-opacity=".1"/>
@@ -75,7 +83,7 @@
     <p class="code" aria-hidden="true">404</p>
     <p class="label">Không tìm thấy trang</p>
     <h1><span class="ln">Bản này</span> <span class="ln"><em>chưa từng lên sóng.</em></span></h1>
-    <p class="lead">Đường dẫn bạn vừa mở không tồn tại, hoặc đã được đổi sang chỗ khác. Thử một trong những lối dưới đây nhé.</p>
+    <p class="lead">Trang này không có, hoặc đã đổi địa chỉ. Bấm vào nền để tạo sóng, hoặc đi tiếp:</p>
     <nav class="links" aria-label="Lối đi khác">
       <a class="btn btn-red" href="/">Về trang chủ<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a class="btn" href="/artists">Nghệ sĩ</a>
@@ -123,6 +131,7 @@
   <div class="foot-mark" aria-hidden="true"><img src="/assets/wordmark.svg" alt="" width="1000" height="158" loading="lazy"></div>
 </footer>
 
+<script src="/assets/field.js"></script>
 <script src="/assets/site.js"></script>
 </body>
 </html>

@@ -220,6 +220,56 @@ a:hover .duo,a:focus-visible .duo,.duo-hover:hover .duo{filter:none}
 .foot-mark{width:min(calc(100% - 2*var(--gut)),var(--max));margin:4px auto -1.2vw;opacity:.07}
 .foot-mark img{width:100%;height:auto}
 
+/* ================= SÂN KHẤU 3D + KHỐI THÁP =================
+   Dùng chung cho cột lượt nghe (trang Nghệ sĩ) và cột số đêm theo năm
+   (trang Sự kiện). Chỉ CSS 3D, không WebGL: chữ sắc nét, bấm được, đọc
+   được bằng trình đọc màn hình.
+     .stage3d  khung nhìn có phối cảnh, kéo ngang để xoay (HK.stage3d)
+     .floor3d  mặt sàn nghiêng --rx, xoay quanh trục đứng --rz
+     .tw       một khối hộp: tâm đáy ở (--x,--y), đáy --w × --d, cao --h;
+               --z nhấc cả khối lên (xếp chồng hai khối thành cột hai màu)
+   Năm mặt i.t (nóc) i.f i.b i.l i.r dựng từ ba biến kích thước — đổi --h
+   là khối mọc lên/thụt xuống, transition tự lo phần chuyển động. */
+.stage3d{position:relative;perspective:1500px;perspective-origin:50% 30%;overflow:hidden;
+  touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+.stage3d.drag{cursor:grabbing}
+.floor3d{position:absolute;left:50%;top:var(--fy,64%);width:0;height:0;transform-style:preserve-3d;
+  transform:rotateX(var(--rx,62deg)) rotateZ(var(--rz,0deg))}
+.floor3d>*{position:absolute}
+.tw{left:0;top:0;transform-style:preserve-3d;transform:translate3d(var(--x,0px),var(--y,0px),var(--z,0px));transition:transform .9s var(--ease);
+  --w:32px;--d:32px;--h:0px;--c1:rgba(240,240,242,.2);--c2:rgba(240,240,242,.03);--cap:rgba(240,240,242,.75)}
+.tw i{position:absolute;left:0;top:0;display:block;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transition:width .9s var(--ease),height .9s var(--ease),margin .9s var(--ease),transform .9s var(--ease),background .3s}
+.tw .t{width:var(--w);height:var(--d);margin:calc(var(--d) / -2) 0 0 calc(var(--w) / -2);transform:translateZ(var(--h));background:var(--cap)}
+.tw .f,.tw .b{width:var(--w);height:var(--h);margin:calc(var(--h) / -2) 0 0 calc(var(--w) / -2);background:linear-gradient(var(--c1),var(--c2))}
+.tw .f{transform:translate3d(0,calc(var(--d) / 2),calc(var(--h) / 2)) rotateX(-90deg)}
+.tw .b{transform:translate3d(0,calc(var(--d) / -2),calc(var(--h) / 2)) rotateX(90deg) rotateZ(180deg)}
+.tw .l,.tw .r{width:var(--h);height:var(--d);margin:calc(var(--d) / -2) 0 0 calc(var(--h) / -2)}
+.tw .r{transform:translate3d(calc(var(--w) / 2),0,calc(var(--h) / 2)) rotateY(90deg);background:linear-gradient(90deg,var(--c1),var(--c2))}
+.tw .l{transform:translate3d(calc(var(--w) / -2),0,calc(var(--h) / 2)) rotateY(-90deg);background:linear-gradient(270deg,var(--c1),var(--c2))}
+/* Nhãn nổi trên nóc khối nằm ở một mặt sàn THỨ HAI (.floor3d.lbl) chồng
+   khít lên mặt sàn chứa khối. Để chung một sàn thì trình duyệt phải tự
+   sắp thứ tự trước-sau cho cả trăm mặt phẳng và có lúc sắp sai — mặt khối
+   che mất nhãn. Tách ra thì lớp nhãn luôn vẽ sau, luôn đọc được.
+   Mỗi nhãn hai lớp: lớp ngoài bay lên theo chiều cao (có transition), lớp
+   trong xoay ngược đúng góc của sàn nên luôn quay mặt về người xem — lớp
+   trong KHÔNG transition, không thì nhãn trễ nhịp mỗi lần sàn xoay. */
+.floor3d.lbl{pointer-events:none}
+.lbl .lb{left:0;top:0;width:0;height:0;transform-style:preserve-3d;transition:transform .9s var(--ease);
+  transform:translate3d(var(--x,0px),var(--y,0px),calc(var(--h,0px) + 12px))}
+.lbl .lb>span{position:absolute;left:0;top:0;width:0;height:0;transform:rotateZ(calc(var(--rz,0deg) * -1)) rotateX(calc(var(--rx,62deg) * -1))}
+.lbl .lb>span>*{position:absolute;left:0;bottom:0;transform:translateX(-50%);white-space:nowrap;text-align:center}
+/* vòng sóng nằm trên mặt sàn + chấm REC ở tâm (MOTIF-01) */
+.floor3d .fl-rings{left:0;top:0;width:var(--fr,640px);height:var(--fr,640px);margin:calc(var(--fr,640px) / -2) 0 0 calc(var(--fr,640px) / -2);
+  border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 calc(var(--fr,640px) / 14 - 1px),rgba(240,240,242,.09) calc(var(--fr,640px) / 14 - 1px) calc(var(--fr,640px) / 14));
+  -webkit-mask:radial-gradient(circle,#000 45%,transparent 70%);mask:radial-gradient(circle,#000 45%,transparent 70%)}
+.floor3d .fl-wave{left:0;top:0;width:var(--fr,640px);height:var(--fr,640px);margin:calc(var(--fr,640px) / -2) 0 0 calc(var(--fr,640px) / -2);
+  border-radius:50%;border:1px solid var(--red);opacity:0;animation:flwave 3.87s linear infinite}   /* 8 phách ở 124 BPM */
+.floor3d .fl-wave.w2{animation-delay:-1.94s}
+@keyframes flwave{0%{transform:scale(.03);opacity:.8}100%{transform:scale(.72);opacity:0}}
+.floor3d .fl-core{left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--red);
+  box-shadow:0 0 0 7px rgba(255,46,76,.14),0 0 40px rgba(255,46,76,.7)}
+
 /* ================= HIỆN DẦN KHI CUỘN =================
    Chỉ bật khi JS chạy (lớp .js trên <html>), nên máy tắt JS vẫn thấy đủ
    nội dung. Dịch ≤16px, 0.6s — nhẹ tay đúng như mục Chuyển động. */
@@ -230,5 +280,5 @@ a:hover .duo,a:focus-visible .duo,.duo-hover:hover .duo{filter:none}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .js .rv{opacity:1;transform:none}
-  .ripple .wave{display:none}
+  .ripple .wave,.floor3d .fl-wave{display:none}
 }

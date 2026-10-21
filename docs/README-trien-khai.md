@@ -12,7 +12,7 @@ Cập nhật: 29.07.2026 · Website: **haustek-group.com** · Liên hệ: **mgmt
 |---|---|
 | `index.html` | Trang chủ |
 | `events.html` | Trang sự kiện: đầu bảng quốc tế, lưu trữ 249 đêm, video các set. **Bảng dữ liệu nằm ở đầu phần script** |
-| `assets/` | Hệ giao diện dùng chung cho mọi trang: `site.css` (màu, chữ, nav, chân trang, nút), `site.js` (menu điện thoại, đổi VI/EN, hiện dần khi cuộn, số chạy, poster nghiêng), `field.js` (trường sóng âm 3D bằng WebGL ở đầu trang chủ, Nghệ sĩ, Sự kiện), `wordmark.svg` (logo) |
+| `assets/` | Hệ giao diện dùng chung cho mọi trang: `site.css` (màu, chữ, nav, chân trang, nút), `site.js` (menu điện thoại, đổi VI/EN, hiện dần khi cuộn, số chạy, poster nghiêng, sân khấu 3D kéo để xoay), `field.js` (trường sóng âm 3D bằng WebGL ở đầu trang chủ, Sự kiện, Pháp lý và trang 404), `wordmark.svg` (logo) |
 | `artists.html` | Trang nghệ sĩ, dạng lưới card. **Bảng dữ liệu nằm ngay đầu phần script trong file** |
 | `artists/` | Thư mục ảnh nghệ sĩ, định dạng `.webp` vuông 800×800 |
 | `vercel.json` | Cấu hình cho Vercel: bỏ đuôi `.html`, cache ảnh, header bảo mật |
@@ -160,6 +160,8 @@ Giải thích các trường:
 Ảnh gốc chụp ra thường 3000×3000 và nặng vài MB — nén xuống webp 800px thì chỉ còn
 khoảng 20–100KB mỗi ảnh mà nhìn vẫn nét, tải nhanh hơn rất nhiều trên mạng di động.
 
+Vòng cột 3D ở đầu trang Nghệ sĩ tự lấy 10 người nhiều lượt nghe nhất trong bảng này — sửa bảng là cột tự đổi theo.
+
 **Đừng ghi số ước lượng vào `streams`.** Con số sai trên trang công khai thì nghệ sĩ và đối tác đều nhận ra ngay. Chưa có số thật thì để `null`, card sẽ ghi "Đang cập nhật" — trông đàng hoàng hơn nhiều so với một con số bịa.
 
 ---
@@ -202,6 +204,10 @@ Code đã tự xử lý: tắt video nếu người dùng bật chế độ gi�
 - **Không tự động phát âm thanh.** Beat 124 BPM ở trang chủ chỉ chạy khi bấm nút (rời tab là tự tắt); trình phát Spotify/YouTube chỉ được tải khi bấm nút phát, đóng là gỡ hẳn
 - **Đồ hoạ 3D không dùng thư viện ngoài.** `assets/field.js` là WebGL thuần, vài KB, không gọi máy chủ bên thứ ba nào — chính sách quyền riêng tư chỉ kể tên Google Fonts. Máy không có WebGL thì hiện hoạ tiết sóng tĩnh; vòng xoay nghệ sĩ và quả cầu cửa hàng là CSS 3D, tắt JS thì thành lưới ảnh / danh sách bình thường
 - **Ảnh trong vòng xoay trang chủ** lấy 12 nghệ sĩ nhiều lượt nghe nhất trong bảng `ARTISTS` của `artists.html` — đổi bảng thì nhớ đổi cả trang chủ
+- **6 thẻ "Kết quả" ở trang chủ** ghi tay từ số liệu thật (lượt nghe trong `ARTISTS`, đêm cháy vé / Boiler Room trong `ARCHIVE` của `events.html`), mỗi thẻ dẫn tới nguồn để khách tự kiểm chứng. Số đổi thì sửa cả HTML lẫn bảng `I18N` của `index.html` (khoá `c1n`…`c6m`)
+- **Trang Sự kiện:** đường hầm 3D dựng từ 12 poster trong khối `#headliners` (xếp từ mới tới cũ — thêm poster thì giữ đúng thứ tự ngày); ba dự án là bảng `SET_GROUPS` (mỗi nhóm có `year`, `stats` và danh sách set; tên và dòng mô tả nằm trong `I18N` với khoá `grp_…`, `sub_…`); cột 3D theo năm tự đếm từ `ARCHIVE`
+- **Chiều cao cột lượt nghe ở trang Nghệ sĩ theo căn bậc hai** cho cột nhỏ không chìm hẳn; con số thật luôn ghi trên đầu cột. Cột theo năm ở trang Sự kiện thì theo tỉ lệ thẳng
+- **Chữ viết theo mục Giọng nói của brand playbook**: viết như người Việt nói, câu ngắn, cụ thể bằng con số; không trộn nửa câu Việt nửa câu Anh
 - **Toàn bộ hiệu ứng tự tắt** khi máy người dùng bật chế độ giảm chuyển động
 - **Ngôn ngữ VI/EN nhớ bằng `sessionStorage`, không phải `localStorage`** — chính sách cookie hứa "đóng tab là mất". Đổi sang `localStorage` là phải sửa lại `legal.html`
 - **Màu và font lấy đúng theo `haustek-brand-playbook.html`** — nền đêm, chữ giấy, một màu đỏ. Muốn đổi thì sửa biến trong `assets/site.css`, mọi trang ăn theo

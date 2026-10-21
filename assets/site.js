@@ -126,12 +126,72 @@
     });
   }
 
+  /* ---------- sân khấu 3D: kéo ngang để xoay ----------
+     stage3d(stage, floor, {rz, auto, range, onFrame})
+       rz     góc xoay ban đầu (độ)
+       auto   tốc độ tự xoay khi không ai chạm (độ/giây); 0 = đứng yên
+       range  [min,max] — có thì chỉ lắc qua lại trong khoảng này thay vì
+              xoay tròn (hợp với biểu đồ xếp thành hàng)
+       onFrame(rz)  gọi mỗi khung hình, để trang tự tính thêm (độ sáng…)
+     Chỉ vẽ khi khung đang trên màn hình. Kéo xong thì cú bấm kế tiếp không
+     tính là bấm, để thả tay trên một khối không vô tình mở nó. */
+  function stage3d(stage,floor,o){
+    o=o||{};
+    let rz=o.rz||0,vel=0,drag=false,lastX=0,moved=0,visible=false,raf=0,lastT=0,dir=1;
+    const auto=REDUCED?0:(o.auto||0),range=o.range;
+    const clamp=v=>range?Math.max(range[0],Math.min(range[1],v)):v;
+    /* đặt --rz lên khung ngoài: sàn khối và sàn nhãn cùng thừa hưởng */
+    function paint(){stage.style.setProperty('--rz',rz.toFixed(2)+'deg');if(o.onFrame)o.onFrame(rz);}
+    function frame(t){
+      raf=0;if(!visible)return;
+      const dt=Math.min(.05,(t-(lastT||t))/1000);lastT=t;
+      if(!drag){
+        vel*=.93;
+        if(Math.abs(vel)>.02)rz=clamp(rz+vel);
+        else if(auto){
+          if(range){if(rz>=range[1])dir=-1;else if(rz<=range[0])dir=1;}
+          rz=clamp(rz+auto*dir*dt);
+        }
+      }
+      paint();
+      if(auto||drag||Math.abs(vel)>.02)raf=requestAnimationFrame(frame);
+    }
+    const go=()=>{if(!raf&&visible)raf=requestAnimationFrame(frame);};
+    new IntersectionObserver(es=>{visible=es[0].isIntersecting;lastT=0;go();},{threshold:0}).observe(stage);
+    /* Chỉ "bắt" con trỏ khi đã kéo quá 6px: bắt ngay từ lúc nhấn thì cú
+       bấm thường bị trình duyệt chuyển sang khung ngoài, nút bên trong
+       không nhận được click. */
+    let pid=null,cap=false;
+    stage.addEventListener('pointerdown',e=>{
+      if(e.button)return;
+      drag=true;moved=0;lastX=e.clientX;vel=0;pid=e.pointerId;cap=false;
+      go();
+    });
+    stage.addEventListener('pointermove',e=>{
+      if(!drag)return;
+      const dx=e.clientX-lastX;lastX=e.clientX;moved+=Math.abs(dx);
+      if(moved>6&&!cap){cap=true;stage.classList.add('drag');try{stage.setPointerCapture(pid);}catch(err){}}
+      const d=dx*.3;rz=clamp(rz+d);vel=d;
+    });
+    const end=()=>{drag=false;cap=false;stage.classList.remove('drag');go();};
+    stage.addEventListener('pointerup',end);stage.addEventListener('pointercancel',end);
+    stage.addEventListener('click',e=>{if(moved>6){e.preventDefault();e.stopPropagation();moved=0;}},true);
+    paint();
+    return{
+      get rz(){return rz;},
+      get dragged(){return drag&&moved>6;},
+      /* xoay tới một góc (bàn phím: Tab tới khối nào thì đưa khối đó ra trước) */
+      to(a){vel=0;const from=rz,t0=performance.now();
+        (function ease(t){const p=Math.min(1,(t-t0)/500);rz=clamp(from+(a-from)*(1-Math.pow(1-p,3)));paint();if(p<1)requestAnimationFrame(ease);})(t0);}
+    };
+  }
+
   /* ---------- trường sóng 3D ở đầu trang con ----------
-     Trang nào có <canvas class="field"> trong .page-hero và đã nạp
-     assets/field.js (trước file này) thì tự bật; không vẽ được thì
-     hoạ tiết SVG tĩnh vẫn ở đó. */
+     Trang nào có <canvas class="field"> trong .page-hero (hoặc trong một
+     khối gắn data-field, như trang 404) và đã nạp assets/field.js trước
+     file này thì tự bật; không vẽ được thì hoạ tiết SVG tĩnh vẫn ở đó. */
   (function(){
-    const ph=document.querySelector('.page-hero'),cv=ph&&ph.querySelector('.field');
+    const ph=document.querySelector('[data-field]')||document.querySelector('.page-hero'),cv=ph&&ph.querySelector('.field');
     if(!cv||!window.HKField)return;
     const phone=matchMedia('(max-width:759px)').matches;
     const f=HKField.mount(cv,{lite:true,pointer:ph,
@@ -140,5 +200,5 @@
     ph.addEventListener('hk-gl-lost',()=>ph.classList.remove('gl-on'));
   })();
 
-  window.HK={lang:bindLang,current:()=>lang,reveal:reveal,loadLang:loadLang,saveLang:saveLang,count:count,tilt:tilt,reduced:REDUCED};
+  window.HK={lang:bindLang,current:()=>lang,reveal:reveal,loadLang:loadLang,saveLang:saveLang,count:count,tilt:tilt,stage3d:stage3d,reduced:REDUCED};
 })();
