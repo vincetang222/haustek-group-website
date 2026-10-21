@@ -5,10 +5,11 @@
   "trailingSlash": false,
 
   "redirects": [
-    { "source": "/submit", "destination": "/metadata", "permanent": true },
+    { "source": "/metadata", "destination": "/#contact", "permanent": false },
+    { "source": "/submit", "destination": "/#contact", "permanent": false },
     { "source": "/nghe-si", "destination": "/artists", "permanent": true },
     { "source": "/su-kien", "destination": "/events", "permanent": true },
-    { "source": "/gui-nhac", "destination": "/metadata", "permanent": true },
+    { "source": "/gui-nhac", "destination": "/#contact", "permanent": false },
     { "source": "/terms", "destination": "/legal#terms", "permanent": false },
     { "source": "/privacy", "destination": "/legal#privacy", "permanent": false }
   ],

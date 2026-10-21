@@ -10,11 +10,12 @@ Cập nhật: 29.07.2026 · Website: **haustek-group.com** · Liên hệ: **mgmt
 
 | File | Nội dung |
 |---|---|
-| `index.html` | Trang chủ. Gồm luôn trang Sự kiện ở đường dẫn `#/events` |
+| `index.html` | Trang chủ |
+| `events.html` | Trang sự kiện: đầu bảng quốc tế, lưu trữ 249 đêm, video các set. **Bảng dữ liệu nằm ở đầu phần script** |
+| `assets/` | Hệ giao diện dùng chung cho mọi trang: `site.css` (màu, chữ, nav, chân trang, nút), `site.js` (menu điện thoại, đổi VI/EN, hiện dần khi cuộn), `wordmark.svg` (logo) |
 | `artists.html` | Trang nghệ sĩ, dạng lưới card. **Bảng dữ liệu nằm ngay đầu phần script trong file** |
 | `artists/` | Thư mục ảnh nghệ sĩ, định dạng `.webp` vuông 800×800 |
 | `vercel.json` | Cấu hình cho Vercel: bỏ đuôi `.html`, cache ảnh, header bảo mật |
-| `metadata.html` | Trang nghệ sĩ khai báo metadata phát hành. Nút "Gửi nhạc" trỏ vào đây. Có nút đổi VI/EN |
 | `legal.html` | 4 mục pháp lý: điều khoản, quyền riêng tư, cookie, khả năng tiếp cận |
 | `404.html` | Trang báo không tìm thấy |
 
@@ -35,14 +36,14 @@ Cập nhật: 29.07.2026 · Website: **haustek-group.com** · Liên hệ: **mgmt
 
 | File | Nội dung |
 |---|---|
-| `robots.txt` | Cho phép Google lập chỉ mục, riêng `metadata.html` thì chặn vì là biểu mẫu nội bộ |
+| `robots.txt` | Cho phép Google lập chỉ mục toàn bộ trang |
 | `sitemap.xml` | Danh sách trang để Google tìm nhanh hơn |
 
 ### Không upload lên web — dùng ở nơi khác
 
 | File | Dùng ở đâu |
 |---|---|
-| `google-apps-script.js` | Dán vào Google Apps Script để form metadata đổ dữ liệu về Google Sheets |
+| `google-apps-script.js` | **Tạm không dùng** — viết cho trang khai báo metadata, trang này đã gỡ khỏi website (10.2026). Giữ lại phòng khi bật lại |
 | `supabase-schema.sql` | Dán vào Supabase SQL Editor để dựng cơ sở dữ liệu doanh thu |
 | `haustek-brand-playbook.html` | Tài liệu nội bộ về nhận diện thương hiệu. Mở bằng trình duyệt, in ra PDF được |
 
@@ -58,12 +59,13 @@ HTML là Vercel tự bỏ đuôi `.html` khỏi mọi đường dẫn:
 | Trước | Sau |
 |---|---|
 | `/artists.html` | `/artists` |
-| `/metadata.html` | `/metadata` |
 | `/legal.html` | `/legal` |
 
 Ai vào bằng link cũ có đuôi `.html` vẫn tới đúng nơi, Vercel tự chuyển hướng.
 File này cũng đặt sẵn vài đường dẫn tiếng Việt cho dễ đọc khi in lên card hay
-poster: `/gui-nhac` và `/nghe-si`.
+poster: `/nghe-si`, `/su-kien`. Các link cũ `/metadata`, `/submit`, `/gui-nhac` giờ
+chuyển tới mục Liên hệ trên trang chủ (chuyển hướng tạm thời, để sau này bật lại
+trang metadata thì trình duyệt không bị nhớ cứng).
 
 Nếu bạn đổi sang **Cloudflare Pages**, không cần `vercel.json` — Cloudflare bỏ
 đuôi `.html` mặc định. Còn **Netlify** thì tạo một file tên `netlify.toml` với
@@ -93,7 +95,7 @@ Netlify và Vercel làm y hệt, cũng miễn phí. Nếu dùng hosting truyền
 - [ ] Mở `haustek-group.com/mot-duong-dan-bay-ba` — phải ra trang 404, không phải lỗi của hosting
 - [ ] Mở `/artists` (không có `.html`) — phải ra trang nghệ sĩ
 - [ ] Ảnh 13 nghệ sĩ hiện đủ, không ai bị ô trống
-- [ ] Bấm nút "Gửi nhạc" trên đầu trang → sang được trang metadata
+- [ ] Bấm nút "Liên hệ" trên đầu trang → cuộn tới mục Liên hệ; ba ô Gửi demo / Phát hành / Booking mở email có sẵn tiêu đề
 - [ ] Bốn link pháp lý dưới chân trang → sang được `legal.html` đúng mục
 - [ ] Chuyển VI/EN ở góc trên phải → toàn trang đổi ngôn ngữ
 - [ ] Mở trên điện thoại, cuộn thử xem có mượt không
@@ -103,6 +105,10 @@ Netlify và Vercel làm y hệt, cũng miễn phí. Nếu dùng hosting truyền
 ---
 
 ## 3. Nối form metadata với Google Sheets
+
+> **Hiện không áp dụng.** Trang khai báo metadata đã gỡ khỏi website (10.2026) —
+> nghệ sĩ gửi demo và hồ sơ phát hành qua email. Mục này giữ lại phòng khi cần bật
+> lại: lấy `metadata.html` từ lịch sử git, bỏ ba dòng chuyển hướng trong `vercel.json`.
 
 Mở `google-apps-script.js`, phần đầu file có hướng dẫn chi tiết từng bước. Tóm tắt:
 
@@ -193,9 +199,8 @@ Code đã tự xử lý: tắt video nếu người dùng bật chế độ gi�
 ## 8. Vài điều đã cố ý làm, đừng vô tình gỡ
 
 - **Không có cookie theo dõi, không Google Analytics, không pixel quảng cáo.** Chính sách cookie đã công bố điều này. Nếu sau này thêm công cụ đo, phải cập nhật lại `legal.html`
-- **Không tự động phát âm thanh.** Beat chỉ chạy khi người dùng bấm nút
+- **Không tự động phát âm thanh.** Trình phát Spotify/YouTube chỉ được tải khi người dùng bấm nút phát, đóng là gỡ hẳn
 - **Toàn bộ hiệu ứng tự tắt** khi máy người dùng bật chế độ giảm chuyển động
-- **Hiệu ứng theo chuột không chạy trên điện thoại** — đây là bản vá cho lỗi cuộn bị giật, đừng bỏ điều kiện kiểm tra `pointerType`
-- **`metadata.html` bị chặn khỏi Google** trong `robots.txt` vì là biểu mẫu nội bộ
-- **Các thẻ `<option>` trong `metadata.html` đều có `value` cố định bằng tiếng Việt.** Đổi sang tiếng Anh chỉ đổi chữ hiển thị, dữ liệu gửi về Google Sheets vẫn nhất quán. Nếu thêm option mới, nhớ gán `value` cho nó
+- **Ngôn ngữ VI/EN nhớ bằng `sessionStorage`, không phải `localStorage`** — chính sách cookie hứa "đóng tab là mất". Đổi sang `localStorage` là phải sửa lại `legal.html`
+- **Màu và font lấy đúng theo `haustek-brand-playbook.html`** — nền đêm, chữ giấy, một màu đỏ. Muốn đổi thì sửa biến trong `assets/site.css`, mọi trang ăn theo
 - **Logo trên web là SVG vector dò từ chính file logo gốc**, không phải font. Đừng thay bằng chữ đánh máy, sẽ không khớp
