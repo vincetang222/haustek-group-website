@@ -12,7 +12,7 @@ Cập nhật: 29.07.2026 · Website: **haustek-group.com** · Liên hệ: **mgmt
 |---|---|
 | `index.html` | Trang chủ |
 | `events.html` | Trang sự kiện: đầu bảng quốc tế, lưu trữ 249 đêm, video các set. **Bảng dữ liệu nằm ở đầu phần script** |
-| `assets/` | Hệ giao diện dùng chung cho mọi trang: `site.css` (màu, chữ, nav, chân trang, nút), `site.js` (menu điện thoại, đổi VI/EN, hiện dần khi cuộn), `wordmark.svg` (logo) |
+| `assets/` | Hệ giao diện dùng chung cho mọi trang: `site.css` (màu, chữ, nav, chân trang, nút), `site.js` (menu điện thoại, đổi VI/EN, hiện dần khi cuộn, số chạy, poster nghiêng), `field.js` (trường sóng âm 3D bằng WebGL ở đầu trang chủ, Nghệ sĩ, Sự kiện), `wordmark.svg` (logo) |
 | `artists.html` | Trang nghệ sĩ, dạng lưới card. **Bảng dữ liệu nằm ngay đầu phần script trong file** |
 | `artists/` | Thư mục ảnh nghệ sĩ, định dạng `.webp` vuông 800×800 |
 | `vercel.json` | Cấu hình cho Vercel: bỏ đuôi `.html`, cache ảnh, header bảo mật |
@@ -199,7 +199,9 @@ Code đã tự xử lý: tắt video nếu người dùng bật chế độ gi�
 ## 8. Vài điều đã cố ý làm, đừng vô tình gỡ
 
 - **Không có cookie theo dõi, không Google Analytics, không pixel quảng cáo.** Chính sách cookie đã công bố điều này. Nếu sau này thêm công cụ đo, phải cập nhật lại `legal.html`
-- **Không tự động phát âm thanh.** Trình phát Spotify/YouTube chỉ được tải khi người dùng bấm nút phát, đóng là gỡ hẳn
+- **Không tự động phát âm thanh.** Beat 124 BPM ở trang chủ chỉ chạy khi bấm nút (rời tab là tự tắt); trình phát Spotify/YouTube chỉ được tải khi bấm nút phát, đóng là gỡ hẳn
+- **Đồ hoạ 3D không dùng thư viện ngoài.** `assets/field.js` là WebGL thuần, vài KB, không gọi máy chủ bên thứ ba nào — chính sách quyền riêng tư chỉ kể tên Google Fonts. Máy không có WebGL thì hiện hoạ tiết sóng tĩnh; vòng xoay nghệ sĩ và quả cầu cửa hàng là CSS 3D, tắt JS thì thành lưới ảnh / danh sách bình thường
+- **Ảnh trong vòng xoay trang chủ** lấy 12 nghệ sĩ nhiều lượt nghe nhất trong bảng `ARTISTS` của `artists.html` — đổi bảng thì nhớ đổi cả trang chủ
 - **Toàn bộ hiệu ứng tự tắt** khi máy người dùng bật chế độ giảm chuyển động
 - **Ngôn ngữ VI/EN nhớ bằng `sessionStorage`, không phải `localStorage`** — chính sách cookie hứa "đóng tab là mất". Đổi sang `localStorage` là phải sửa lại `legal.html`
 - **Màu và font lấy đúng theo `haustek-brand-playbook.html`** — nền đêm, chữ giấy, một màu đỏ. Muốn đổi thì sửa biến trong `assets/site.css`, mọi trang ăn theo

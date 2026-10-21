@@ -49,175 +49,172 @@
 
 <style>
 /* =====================================================================
-   TRANG CHỦ
-   Bản trước có 11 canvas vẽ liên tục, three.js 600KB cho nền 3D, băng chữ
-   chạy ở khắp nơi và mỗi khu vực một màu riêng — nặng, rối, và lệch hẳn
-   khỏi playbook ("không màu mè, không phô trương"). Bản này chỉ còn một
-   hoạ tiết động duy nhất là sóng loang ở đầu trang (SVG + CSS, không JS),
-   còn lại là chữ, ảnh thật của nghệ sĩ và các đêm diễn.
+   TRANG CHỦ — ít chữ, nhiều hình
+   Góp ý nhận được: trang nhiều chữ, thiếu đồ hoạ 3D, không giải trí. Bản
+   này giữ chữ ở mức một câu cho mỗi ý, còn lại để hình nói:
+     • đầu trang: trường sóng âm 3D (assets/field.js) + nút bật beat
+     • nghệ sĩ: vòng xoay 3D bằng ảnh, kéo để xoay
+     • cửa hàng nhạc số: quả cầu 3D tên các nền tảng, kéo để xoay
+     • sự kiện: poster nghiêng theo chuột
+   Mọi thứ 3D đều có bản tĩnh khi máy tắt JS, không có WebGL hoặc bật giảm
+   chuyển động.
    ===================================================================== */
 
-/* ---------- 00 · đầu trang ---------- */
-.hero{position:relative;min-height:min(100svh,980px);display:flex;flex-direction:column;justify-content:flex-end;
-  padding-top:calc(var(--nav-h) + 48px);overflow:hidden}
+/* ---------- đầu trang ---------- */
+.hero{position:relative;min-height:max(100svh,640px);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;
+  padding-top:calc(var(--nav-h) + 40px);background:radial-gradient(60% 50% at 70% 45%,rgba(255,46,76,.07),transparent 70%)}
+.field{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block;opacity:0;transition:opacity 1.2s var(--ease)}
+.hero.gl-on .field{opacity:1}
 .hero-viz{position:absolute;z-index:0;width:min(900px,64vw);aspect-ratio:1;left:calc(68% - min(450px,32vw));top:calc(50% - 30px);transform:translateY(-50%)}
 .hero-viz .ripple{position:absolute;inset:0;width:100%;height:100%}
-.hero-viz .core{fill:var(--red)}
-.hero-viz .halo{fill:none;stroke:var(--red);stroke-opacity:.5;animation:rec 1.94s steps(2,end) infinite}
-.hero-viz .pin{fill:var(--paper);fill-opacity:.7;stroke:none}
-.hero-viz text{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;fill:var(--concrete)}
-.hero-in{position:relative;z-index:1}
-.hero h1{margin:26px 0 30px;max-width:11ch}
-.hero-row{display:grid;gap:30px;justify-items:start}
-.hero-row .lead{max-width:44ch}
-.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
-/* chữ đầu trang hiện ngay bằng CSS, không chờ JS — đây là phần tử lớn nhất
-   màn hình đầu, chờ JS là chậm lần vẽ đầu tiên */
+.hero.gl-on .hero-viz{display:none}
+/* lớp tối phía dưới — chữ và dải số luôn đọc rõ trên nền điểm sáng */
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:55%;z-index:0;pointer-events:none;
+  background:linear-gradient(to top,var(--ink) 18%,rgba(10,10,13,.7) 55%,transparent)}
+.hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(10,10,13,.75),rgba(10,10,13,.25) 45%,transparent 70%)}
+@media(max-width:759px){.hero::before{background:none}}
+.hero-in{position:relative;z-index:1;pointer-events:none}
+.hero-in a,.hero-in button{pointer-events:auto}
+.hero h1{margin:22px 0 22px;max-width:11ch}
+.hero-sub{font-size:clamp(17px,1.5vw,20px);color:var(--concrete);font-weight:300}
+.hero-sub strong{color:var(--paper);font-weight:500}
+.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:30px}
 .hero-in>*{animation:rise .8s var(--ease) both}
 .hero-in>:nth-child(2){animation-delay:.08s}
 .hero-in>:nth-child(3){animation-delay:.16s}
 .hero-in>:nth-child(4){animation-delay:.24s}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}}
 
-.stats{display:grid;grid-template-columns:repeat(2,1fr);margin-top:clamp(48px,7vh,80px);border-top:1px solid var(--line)}
+/* nút bật beat — đồ chơi của trang: mỗi tiếng kick bắn sóng đỏ qua mặt sàn */
+.beat-dock{display:flex;align-items:center;gap:14px}
+.beat{position:relative;width:60px;height:60px;border-radius:50%;flex:none;display:grid;place-items:center;
+  border:1px solid var(--red);background:rgba(10,10,13,.6);transition:background .25s,transform .25s var(--ease)}
+.beat svg{width:16px;height:16px;fill:var(--paper)}
+.beat:hover{transform:scale(1.06)}
+.beat::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--red);opacity:0}
+.beat[aria-pressed="true"]{background:var(--red)}
+.beat[aria-pressed="true"]::after{animation:beatring .484s linear infinite}   /* đúng 1 phách ở 124 BPM */
+@keyframes beatring{from{transform:scale(1);opacity:.8}to{transform:scale(1.6);opacity:0}}
+.beat-txt{display:grid;gap:2px;line-height:1.3}
+.beat-txt b{font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.beat-txt small{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--concrete)}
+
+.stats{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:clamp(40px,6vh,72px);border-top:1px solid var(--line)}
 .stats div{display:flex;flex-direction:column-reverse;gap:6px;padding:22px 0 26px}
-.stats div:nth-child(odd){padding-right:16px}
 .stats div:nth-child(even){padding-left:20px;border-left:1px solid var(--line)}
 .stats div:nth-child(n+3){border-top:1px solid var(--line)}
-.stats dd{font-family:var(--disp);font-weight:800;font-size:clamp(30px,3.6vw,48px);letter-spacing:-.03em;line-height:1}
+.stats dd{font-family:var(--disp);font-weight:800;font-size:clamp(30px,3.6vw,52px);letter-spacing:-.03em;line-height:1}
 .stats dt{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--concrete)}
 @media(min-width:900px){
-  .stats{grid-template-columns:repeat(4,1fr)}
+  .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
   .stats div{padding:26px 24px 30px!important;border-top:0!important;border-left:1px solid var(--line)}
   .stats div:first-child{padding-left:0!important;border-left:0}
 }
-/* Dưới 1024px nhãn nền tảng co còn ~7–9px, không đọc được — ẩn đi.
-   Điện thoại: tâm sóng dời lên góc phải phía trên, chữ nằm dưới. */
-@media(max-width:1023px){.hero-viz .rl{display:none}}
 @media(max-width:759px){
-  .hero{min-height:auto;padding-top:calc(var(--nav-h) + 168px)}
-  .hero-viz{width:150vw;left:-7vw;top:calc(var(--nav-h) + 96px - 75vw);transform:none}
-  .hero-viz .ripple circle{stroke-width:1.2}
+  .hero{padding-top:calc(var(--nav-h) + 52vw)}
+  .hero-viz{width:150vw;left:-7vw;top:calc(var(--nav-h) + 40px - 75vw);transform:none}
+  .hero::after{height:70%}
 }
 
-/* ---------- 01 · về Haustek ---------- */
-.about-grid{display:grid;gap:44px}
-.about-body .lead{color:var(--paper);font-size:clamp(19px,1.8vw,24px);line-height:1.5;max-width:34ch}
-.facts{margin-top:34px;border-top:1px solid var(--line)}
-.facts div{display:flex;justify-content:space-between;gap:20px;padding:15px 0;border-bottom:1px solid var(--line);font-size:15px}
-.facts dt{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--concrete);padding-top:3px}
-.facts dd{text-align:right}
-.values{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:clamp(56px,7vw,88px)}
-.value{background:var(--ink);padding:28px 26px 32px;display:grid;gap:12px;align-content:start}
-.value .code{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--concrete)}
-.value p{color:var(--concrete);font-size:15px}
-@media(min-width:620px){.values{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:900px){
-  .about-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:72px;align-items:end}
-  .values{grid-template-columns:repeat(4,1fr)}
-}
+/* ---------- tiêu đề khối: một dòng nhãn + một câu, không đoạn văn ---------- */
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px;margin-bottom:clamp(36px,4.5vw,60px)}
+.head h2{margin-top:20px}
 
-/* ---------- 02 · dịch vụ: xếp như một tracklist ---------- */
-.tracks{border-top:1px solid var(--line)}
-.trk{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px 18px;padding:26px 0;border-bottom:1px solid var(--line);position:relative}
-.trk .no{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--concrete);padding-top:6px;transition:color .25s}
-.trk h3{font-size:clamp(21px,2.1vw,30px);font-weight:800;letter-spacing:-.025em}
-.trk p{grid-column:2;color:var(--concrete);max-width:60ch}
-.trk p a{color:var(--paper);border-bottom:1px solid var(--line-2)}
-.trk p a:hover{border-color:var(--red)}
-.trk .chips{grid-column:2;display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--concrete);
-  padding:6px 10px;border:1px solid var(--line);border-radius:100px}
-.trk:hover .no{color:var(--red)}
-@media(min-width:900px){
-  .trk{grid-template-columns:72px minmax(0,1fr) minmax(0,1.25fr);gap:6px 32px;padding:34px 0}
-  .trk p,.trk .chips{grid-column:3}
-  .trk p{grid-row:1}
-  .trk .chips{grid-row:2}
-}
+/* ---------- 01 · dịch vụ: 6 ô, mỗi ô một câu ---------- */
+.svc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(min-width:900px){.svc{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
+.svc a{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:36px;min-height:clamp(170px,17vw,230px);
+  padding:22px 22px 24px;border:1px solid var(--line);border-radius:8px;background:var(--ink-2);overflow:hidden;
+  transition:border-color .3s,transform .3s var(--ease)}
+.svc .no{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--concrete);transition:color .3s}
+.svc h3{font-size:clamp(19px,1.9vw,27px);font-weight:800;letter-spacing:-.025em}
+.svc p{margin-top:6px;color:var(--concrete);font-size:15px;line-height:1.45}
+/* vòng sóng nhỏ ở góc ô, loang ra khi rê chuột */
+.svc svg{position:absolute;right:-46px;top:-46px;width:150px;height:150px;pointer-events:none}
+.svc svg circle{fill:none;stroke:var(--paper);stroke-opacity:.12;transform-origin:75px 75px;transition:transform .7s var(--ease),stroke .3s,stroke-opacity .3s}
+.svc a:hover{border-color:var(--red);transform:translateY(-4px)}
+.svc a:hover .no{color:var(--red)}
+.svc a:hover svg circle{stroke:var(--red);stroke-opacity:.5}
+.svc a:hover svg circle:nth-child(2){transform:scale(1.25)}
+.svc a:hover svg circle:nth-child(3){transform:scale(1.5)}
+@media(max-width:620px){.svc a{min-height:150px;padding:18px}.svc p{font-size:14px}}
 
-/* ---------- 03 · cửa hàng nhạc số ---------- */
-/* 20 ô chia hết cho 4 và 5 — cột cố định để hàng cuối không bao giờ hở */
-.stores{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
-@media(min-width:1100px){.stores{grid-template-columns:repeat(5,minmax(0,1fr))}}
-.stores li{list-style:none;background:var(--ink);padding:22px 20px;font-family:var(--disp);font-weight:700;font-size:clamp(16px,1.4vw,19px);letter-spacing:-.01em;
-  display:flex;align-items:center;min-height:84px}
-.stores li.plus{background:var(--red);color:var(--paper);font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.12em;text-transform:uppercase;line-height:1.5}
-/* điện thoại: lưới 2 cột dài tới 10 hàng — đổi thành dải nhãn chảy tự do */
-@media(max-width:759px){
-  .stores{display:flex;flex-wrap:wrap;gap:8px;background:none;border:0}
-  .stores li{min-height:0;padding:10px 15px;border:1px solid var(--line-2);border-radius:100px;font-size:15px}
-  .stores li.plus{border-color:var(--red)}
-}
+/* ---------- 02 · nghệ sĩ: vòng xoay 3D ---------- */
+.ring{position:relative;margin-top:8px}
+.ring-stage{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px}   /* bản không JS: lưới */
+.ring-item{display:block}
+.ring-item .ph{display:block;aspect-ratio:1;overflow:hidden;border-radius:6px;background:var(--ink-3)}
+.ring-item img{width:100%;height:100%;object-fit:cover}
+.ring-item .nm{display:block;margin-top:10px;font-family:var(--disp);font-weight:800;font-size:16px;letter-spacing:-.015em;text-align:center}
+.js .ring.on{height:clamp(380px,44vw,620px);perspective:1400px;perspective-origin:50% 30%;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none;
+  margin-inline:calc(-1 * var(--gut));overflow:hidden}
+.js .ring.on.drag{cursor:grabbing}
+.js .ring.on .ring-stage{display:block;position:absolute;left:50%;top:54%;width:var(--w);height:var(--w);
+  margin:calc(var(--w) / -2) 0 0 calc(var(--w) / -2);transform-style:preserve-3d}
+.js .ring.on .ring-item{position:absolute;inset:0;transform-style:preserve-3d;-webkit-user-drag:none}
+.js .ring.on .ring-item img{-webkit-user-drag:none;pointer-events:none}
+.js .ring.on .ring-item .nm{position:absolute;left:0;right:0;top:100%;opacity:0;transition:opacity .3s}
+.js .ring.on .ring-item.front .nm{opacity:1}
+.js .ring.on .ring-item.front .duo{filter:none}
+.ring-hint{display:none;align-items:center;justify-content:center;gap:10px;margin-top:6px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--concrete)}
+.ring-hint::before,.ring-hint::after{content:"";width:28px;height:1px;background:var(--line-2)}
+.js .ring.on+.ring-hint{display:flex}   /* chỉ hiện khi vòng xoay thật sự chạy */
 
-/* ---------- 04 · nghệ sĩ ---------- */
-.roster{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 16px}
-.art{display:block}
-.art .ph{aspect-ratio:1;overflow:hidden;background:var(--ink-3);border-radius:4px}
-.art .ph img{width:100%;height:100%;object-fit:cover}
-.art:hover .ph img{transform:scale(1.03)}
-.art h3{margin-top:14px;font-size:clamp(17px,1.5vw,21px)}
-.art .tr{display:block;margin-top:4px;color:var(--concrete);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.art .st{display:block;margin-top:6px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--concrete)}
-.art .st b{color:var(--paper);font-weight:500}
-@media(min-width:760px){.roster{grid-template-columns:repeat(4,minmax(0,1fr));gap:40px 20px}}
-.sec-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px;margin-top:clamp(40px,5vw,56px)}
-.sec-foot p{color:var(--concrete);font-size:15px;max-width:52ch}
+/* ---------- 03 · cửa hàng nhạc số: quả cầu chữ 3D ---------- */
+.reach{display:grid;gap:24px;align-items:center}
+@media(min-width:900px){.reach{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px}}
+.reach .big{margin-top:30px;font-family:var(--disp);font-weight:800;font-size:clamp(64px,9vw,140px);letter-spacing:-.05em;line-height:.9}
+.reach .big small{display:block;margin-top:12px;font-family:var(--mono);font-weight:400;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--concrete)}
+.orb{position:relative}
+.orb ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.orb li{font-family:var(--disp);font-weight:700;font-size:15px;padding:9px 14px;border:1px solid var(--line-2);border-radius:100px}
+.orb li.vn{color:var(--red);border-color:var(--red)}
+.orb-core{display:none}
+.js .orb.on{height:clamp(340px,40vw,560px);cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.js .orb.on.drag{cursor:grabbing}
+.js .orb.on ul{display:block;position:absolute;inset:0}
+.js .orb.on li{position:absolute;left:50%;top:50%;padding:0;border:0;white-space:nowrap;font-size:clamp(15px,1.7vw,24px);letter-spacing:-.01em;will-change:transform,opacity}
+.js .orb.on .orb-core{display:block;position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--red);
+  box-shadow:0 0 0 8px rgba(255,46,76,.12),0 0 40px rgba(255,46,76,.6);animation:rec 1.94s steps(2,end) infinite}
 
-/* ---------- 05 · sự kiện ---------- */
-.ev-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:clamp(36px,4vw,48px)}
-.ev-stats div{background:var(--ink);padding:20px 22px;display:flex;flex-direction:column-reverse;gap:4px}
-.ev-stats dd{font-family:var(--disp);font-weight:800;font-size:clamp(26px,2.6vw,36px);letter-spacing:-.03em;line-height:1.05}
+/* ---------- 04 · sự kiện ---------- */
+.ev-stats{display:flex;flex-wrap:wrap;gap:12px 40px;margin-top:22px}
+.ev-stats div{display:flex;align-items:baseline;gap:10px}
+.ev-stats dd{font-family:var(--disp);font-weight:800;font-size:clamp(28px,3vw,42px);letter-spacing:-.03em;line-height:1}
 .ev-stats dt{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--concrete)}
-@media(min-width:760px){.ev-stats{grid-template-columns:repeat(4,1fr)}}
+.ev-stats div:last-child dd{color:var(--red)}
 .posters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.pst{display:block;position:relative}
-.pst .ph{aspect-ratio:4/5;overflow:hidden;background:var(--ink-3);border-radius:4px;position:relative}
+@media(min-width:900px){.posters{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}}
+.pst{display:block}
+.pst .ph{position:relative;display:block;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:var(--ink-3);will-change:transform}
 .pst .ph img{width:100%;height:100%;object-fit:cover}
-.pst:hover .ph img{transform:scale(1.03)}
-.pst .so{position:absolute;top:12px;left:12px;z-index:1;background:var(--red);color:var(--paper);font-family:var(--mono);font-size:10.5px;
-  letter-spacing:.12em;padding:5px 9px;border-radius:3px}
+.pst .so{position:absolute;top:12px;left:12px;z-index:1;background:var(--red);color:var(--paper);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;padding:5px 9px;border-radius:3px}
 .pst h3{margin-top:14px}
 .pst .mt{display:block;margin-top:4px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--concrete);text-transform:uppercase}
-@media(min-width:900px){.posters{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}}
-.names{margin-top:clamp(36px,4vw,52px);padding-top:26px;border-top:1px solid var(--line);display:grid;gap:12px}
-.names p:last-child{font-family:var(--disp);font-weight:700;font-size:clamp(18px,1.9vw,26px);line-height:1.45;letter-spacing:-.015em;color:var(--paper)}
-.names i{font-style:normal;color:var(--red);margin:0 .15em;font-size:.6em;vertical-align:.2em}
-.names b{font-weight:inherit;white-space:nowrap}
 
-/* ---------- câu cam kết ---------- */
-.pull{position:relative;overflow:hidden;text-align:center}
-.pull .ripple{width:min(900px,140vw);aspect-ratio:1;left:50%;top:50%;transform:translate(-50%,-50%)}
-.pull blockquote{position:relative;z-index:1;font-family:var(--disp);font-weight:800;font-size:clamp(32px,5.2vw,76px);
-  line-height:1.04;letter-spacing:-.035em;max-width:21ch;margin:0 auto;text-wrap:balance}
-.pull blockquote em{font-style:italic;font-weight:700;color:var(--concrete)}
-.pull .label{justify-content:center;margin-top:30px;position:relative;z-index:1}
+/* ---------- 05 · hỏi đáp ---------- */
+.faq-grid{display:grid;gap:36px}
+@media(min-width:900px){.faq-grid{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:72px}}
 
-/* ---------- 06 · hỏi đáp ---------- */
-.faq-grid{display:grid;gap:40px}
-.faq-side p{color:var(--concrete);margin-top:22px;max-width:34ch}
-.faq-side a{color:var(--paper);border-bottom:1px solid var(--line-2)}
-@media(min-width:900px){.faq-grid{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:72px}}
-
-/* ---------- 07 · liên hệ ---------- */
+/* ---------- 06 · liên hệ ---------- */
 .contact{position:relative;overflow:hidden;background:var(--ink-2)}
 .contact .ripple{width:min(1100px,170vw);aspect-ratio:1;right:-30%;bottom:-55%}
 .contact .wrap{position:relative;z-index:1}
-.mail{display:inline-block;margin:30px 0 clamp(44px,5vw,64px);font-family:var(--disp);font-weight:800;
+.mail{display:inline-block;margin:30px 0 clamp(40px,5vw,60px);font-family:var(--disp);font-weight:800;
   font-size:clamp(24px,5.2vw,72px);letter-spacing:-.035em;line-height:1.05;overflow-wrap:anywhere;
   border-bottom:2px solid var(--red);padding-bottom:6px;transition:color .25s}
 .mail:hover{color:var(--red)}
 .routes{display:grid;gap:12px}
-.route{display:grid;gap:10px;align-content:start;padding:26px 24px 24px;border:1px solid var(--line-2);border-radius:6px;background:rgba(10,10,13,.6);
-  transition:border-color .25s,background .25s}
+@media(min-width:760px){.routes{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
+.route{display:flex;flex-direction:column;gap:8px;padding:24px;border:1px solid var(--line-2);border-radius:8px;background:rgba(10,10,13,.6);
+  transition:border-color .25s,transform .25s var(--ease)}
 .route .code{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--concrete)}
 .route p{color:var(--concrete);font-size:15px}
-.route .go{margin-top:8px;display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+.route .go{margin-top:auto;padding-top:10px;display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
 .route .go svg{width:14px;height:14px;transition:transform .25s var(--ease)}
-.route:hover{border-color:var(--paper);background:rgba(10,10,13,.9)}
+.route:hover{border-color:var(--red);transform:translateY(-3px)}
 .route:hover .go svg{transform:translateX(4px)}
-.route:hover .code{color:var(--red)}
-@media(min-width:760px){.routes{grid-template-columns:repeat(3,1fr);gap:16px}}
 .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
 </style>
 </head>
@@ -258,12 +255,11 @@
 
 <main id="main">
 
-<!-- 00 · ĐẦU TRANG -->
+<!-- ĐẦU TRANG — trường sóng âm 3D. SVG bên dưới là bản tĩnh: hiện khi máy
+     không vẽ được WebGL; vẽ được thì lớp .gl-on giấu nó đi. -->
 <section class="hero" id="top">
+  <canvas class="field" id="field" aria-hidden="true"></canvas>
   <div class="hero-viz" aria-hidden="true">
-    <!-- Sóng loang (MOTIF-01): chấm REC đỏ là Haustek, mỗi vòng là một lần
-         âm thanh lan ra, chạm tới tên các cửa hàng nhạc số. Ba vòng động lặp
-         theo nhịp 124 BPM; bật giảm chuyển động thì chỉ còn vòng tĩnh. -->
     <svg class="ripple" viewBox="0 0 1000 1000">
       <circle cx="500" cy="500" r="70" stroke-opacity=".26"/>
       <circle cx="500" cy="500" r="125" stroke-opacity=".21"/>
@@ -275,226 +271,142 @@
       <circle class="wave" cx="500" cy="500" r="500" stroke-opacity=".9"/>
       <circle class="wave w2" cx="500" cy="500" r="500" stroke-opacity=".9"/>
       <circle class="wave w3" cx="500" cy="500" r="500" stroke-opacity=".9"/>
-      <circle class="halo" cx="500" cy="500" r="17"/>
       <circle class="core" cx="500" cy="500" r="7"/>
-      <g class="rl">
-        <circle class="pin" cx="650" cy="383" r="3.2"/><text x="661" y="387">Spotify</text>
-        <circle class="pin" cx="746" cy="599" r="3.2"/><text x="757" y="603">Apple Music</text>
-        <circle class="pin" cx="651" cy="190" r="3.2"/><text x="662" y="194">TikTok</text>
-        <circle class="pin" cx="839" cy="765" r="3.2"/><text x="850" y="769">Zing MP3</text>
-        <circle class="pin" cx="302" cy="217" r="3.2"/><text x="313" y="221">NhacCuaTui</text>
-        <circle class="pin" cx="917" cy="396" r="3.2"/><text x="906" y="380" text-anchor="end">YouTube Music</text>
-      </g>
     </svg>
   </div>
   <div class="wrap hero-in">
     <p class="label" data-i18n="hero_k">Music label &amp; distribution · Est. 2017</p>
     <h1 data-i18n="h1"><span class="ln">Để nhạc Việt</span> <span class="ln"><em>vang xa</em> hơn.</span></h1>
-    <div class="hero-row">
-      <p class="lead" data-i18n="hero_p">Haustek đưa nhạc của nghệ sĩ Việt, trong nước lẫn hải ngoại, lên hơn 200 cửa hàng nhạc số — từ Spotify, TikTok đến NhacCuaTui và Zing MP3. Phát hành, label, sự kiện, sản xuất: <strong>một đầu mối</strong>.</p>
-      <div class="hero-cta">
-        <a class="btn btn-red" href="#contact"><span data-i18n="cta_work">Hợp tác với Haustek</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a class="btn" href="/artists" data-i18n="cta_artists">Nghe nghệ sĩ</a>
+    <p class="hero-sub" data-i18n="hero_sub">Phát hành · Label · Sự kiện · Sản xuất — <strong>một đầu mối</strong>.</p>
+    <div class="hero-cta">
+      <a class="btn btn-red" href="#contact"><span data-i18n="cta_work">Hợp tác với Haustek</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn" href="/artists" data-i18n="cta_artists">Xem nghệ sĩ</a>
+      <div class="beat-dock">
+        <button class="beat" id="beatBtn" type="button" aria-pressed="false" aria-label="Bật beat"><svg viewBox="0 0 10 12" aria-hidden="true"><path id="beatIco" d="M0 0l10 6L0 12z"/></svg></button>
+        <span class="beat-txt"><b data-i18n="beat_on">Bật beat</b><small data-i18n="beat_hint">124 BPM · rê chuột tạo sóng</small></span>
       </div>
     </div>
+  </div>
+  <div class="wrap" style="position:relative;z-index:1">
     <dl class="stats">
-      <div><dt data-i18n="st_streams">Lượt nghe</dt><dd>114M+</dd></div>
-      <div><dt data-i18n="st_rel">Bản phát hành</dt><dd data-i18n="st_rel_n">7.000+</dd></div>
-      <div><dt data-i18n="st_stores">Cửa hàng nhạc số</dt><dd>200+</dd></div>
-      <div><dt data-i18n="st_nights">Đêm diễn từ 2015</dt><dd>249</dd></div>
+      <div><dt data-i18n="st_streams">Lượt nghe</dt><dd data-count="114" data-suffix="M+">114M+</dd></div>
+      <div><dt data-i18n="st_rel">Bản phát hành</dt><dd data-count="7000" data-suffix="+">7.000+</dd></div>
+      <div><dt data-i18n="st_stores">Cửa hàng nhạc số</dt><dd data-count="200" data-suffix="+">200+</dd></div>
+      <div><dt data-i18n="st_nights">Đêm diễn</dt><dd data-count="249">249</dd></div>
     </dl>
   </div>
 </section>
 
-<!-- 01 · VỀ HAUSTEK -->
-<section class="sec" id="about">
-  <div class="wrap">
-    <div class="about-grid">
-      <div>
-        <p class="label rv"><span class="n">01</span><span data-i18n="ab_k">Về Haustek</span></p>
-        <h2 class="rv" style="margin-top:22px" data-i18n="ab_h"><span class="ln">Gốc rễ toàn cầu,</span> <span class="ln"><em>thuộc về nhạc Việt.</em></span></h2>
-      </div>
-      <div class="about-body rv">
-        <p class="lead" data-i18n="ab_p">Gần một thập kỷ đưa nhạc Việt ra thế giới. Khởi đầu từ những hầm techno, đến ánh sáng của những sân khấu lớn.</p>
-        <dl class="facts">
-          <div><dt data-i18n="f1">Thành lập</dt><dd data-i18n="f1v">2017 · California → Việt Nam</dd></div>
-          <div><dt data-i18n="f2">Người nghe</dt><dd data-i18n="f2v">3.500.000+ mỗi tháng</dd></div>
-          <div><dt data-i18n="f3">Bản ghi đi xa nhất</dt><dd data-i18n="f3v">Đêm Thành Phố — 2.931.346 lượt nghe</dd></div>
-        </dl>
-      </div>
-    </div>
-    <div class="values">
-      <div class="value rv"><span class="code">VAL-01</span><h3 data-i18n="v1t">Minh bạch</h3><p data-i18n="v1">Số liệu rõ ràng, điều khoản không chữ nhỏ. Nghệ sĩ giữ quyền sở hữu tác phẩm.</p></div>
-      <div class="value rv"><span class="code">VAL-02</span><h3 data-i18n="v2t">Đồng hành</h3><p data-i18n="v2">Không phải nền tảng tự phục vụ — là con người nghe từng demo. Demo nào gửi tới, chúng tôi cũng nghe.</p></div>
-      <div class="value rv"><span class="code">VAL-03</span><h3 data-i18n="v3t">Hai thế giới</h3><p data-i18n="v3">California ↔ Việt Nam. Chuẩn quốc tế trong vận hành, chất Việt trong âm nhạc.</p></div>
-      <div class="value rv"><span class="code">VAL-04</span><h3 data-i18n="v4t">Underground gốc</h3><p data-i18n="v4">Sinh ra từ hầm techno và những đêm diễn nhỏ. Dù lớn đến đâu, thái độ vẫn thuộc về văn hoá ngầm.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 02 · DỊCH VỤ -->
+<!-- 01 · DỊCH VỤ -->
 <section class="sec" id="services">
   <div class="wrap">
-    <header class="sec-head split">
+    <div class="head">
       <div>
-        <p class="label rv"><span class="n">02</span><span data-i18n="sv_k">Dịch vụ</span></p>
-        <h2 class="rv" style="margin-top:22px" data-i18n="sv_h"><span class="ln">Bạn cần gì cho âm nhạc,</span> <span class="ln"><em>Haustek có ở đây.</em></span></h2>
+        <p class="label rv"><span class="n">01</span><span data-i18n="sv_k">Dịch vụ</span></p>
+        <h2 class="rv" data-i18n="sv_h"><span class="ln">Bạn lo phần nhạc.</span> <span class="ln"><em>Phần còn lại có Haustek.</em></span></h2>
       </div>
-      <p class="lead rv" data-i18n="sv_p">Sáu mảng việc, một đầu mối. Bạn lo phần nhạc — từ bản thu đầu tiên tới đêm diễn cháy vé, phần còn lại có người lo.</p>
-    </header>
-    <div class="tracks">
-      <article class="trk rv">
-        <span class="no">SVC-01</span>
-        <h3 data-i18n="s1t">Phát hành &amp; khai thác bản ghi</h3>
-        <p data-i18n="s1">Nhạc của bạn lên hơn 200 cửa hàng số — Spotify, Apple Music, TikTok, Zing MP3 và nhiều nơi khác. Đúng hẹn, số liệu công khai, báo cáo rõ.</p>
-        <div class="chips"><span class="chip">Distribution</span><span class="chip">Pitch playlist</span><span class="chip" data-i18n="s1c">Báo cáo doanh thu</span></div>
-      </article>
-      <article class="trk rv">
-        <span class="no">SVC-02</span>
-        <h3 data-i18n="s2t">Hãng thu âm</h3>
-        <p data-i18n="s2">Tìm chất riêng, dựng hình ảnh, vạch lộ trình dài hơi. Demo gửi tới chắc chắn có người nghe.</p>
-        <div class="chips"><span class="chip">A&amp;R</span><span class="chip">Label</span><span class="chip" data-i18n="s2c">Định hướng nghệ sĩ</span></div>
-      </article>
-      <article class="trk rv">
-        <span class="no">SVC-03</span>
-        <h3 data-i18n="s3t">Sản xuất âm nhạc</h3>
-        <p data-i18n="s3">Kỹ sư âm thanh và nhạc sĩ từ các nhạc viện — nhạc phim, jingle, quảng cáo, từ ý tưởng đến bản master.</p>
-        <div class="chips"><span class="chip" data-i18n="s3c1">Phối khí</span><span class="chip">Mix &amp; master</span><span class="chip" data-i18n="s3c2">Nhạc quảng cáo</span></div>
-      </article>
-      <article class="trk rv">
-        <span class="no">SVC-04</span>
-        <h3 data-i18n="s4t">Tổ chức sự kiện</h3>
-        <p data-i18n="s4">Từ club night trong nước tới Boiler Room và United We Stream Asia — 249 đêm từ 2015. <a href="/events">Xem những đêm đã làm →</a></p>
-        <div class="chips"><span class="chip">Club night</span><span class="chip">Festival</span><span class="chip">Livestream</span></div>
-      </article>
-      <article class="trk rv">
-        <span class="no">SVC-05</span>
-        <h3 data-i18n="s5t">Booking nghệ sĩ</h3>
-        <p data-i18n="s5">DJ set, live band, trình diễn kèm visual — cho nhãn hàng, festival hay không gian riêng.</p>
-        <div class="chips"><span class="chip">DJ set</span><span class="chip">Live</span><span class="chip">Visual</span></div>
-      </article>
-      <article class="trk rv">
-        <span class="no">SVC-06</span>
-        <h3 data-i18n="s6t">Marketing &amp; truyền thông</h3>
-        <p data-i18n="s6">Chiến lược dựa trên dữ liệu, chiến dịch digital, quản lý mạng xã hội, content và sản xuất media — video, ảnh, thiết kế. Trọn gói cho một bản phát hành hay cả một thương hiệu.</p>
-        <div class="chips"><span class="chip" data-i18n="s6c1">Chiến lược</span><span class="chip">Digital ads</span><span class="chip">Social</span><span class="chip">Content</span><span class="chip">Media</span></div>
-      </article>
+    </div>
+    <div class="svc">
+      <a class="rv" href="#contact"><svg viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="22"/><circle cx="75" cy="75" r="44"/><circle cx="75" cy="75" r="66"/></svg><span class="no">01</span><span><h3 data-i18n="s1t">Phát hành</h3><p data-i18n="s1">Lên 200+ cửa hàng nhạc số, đúng hẹn, số liệu rõ.</p></span></a>
+      <a class="rv" href="#contact"><svg viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="22"/><circle cx="75" cy="75" r="44"/><circle cx="75" cy="75" r="66"/></svg><span class="no">02</span><span><h3 data-i18n="s2t">Hãng thu âm</h3><p data-i18n="s2">Tìm chất riêng, vạch lộ trình dài hơi.</p></span></a>
+      <a class="rv" href="#contact"><svg viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="22"/><circle cx="75" cy="75" r="44"/><circle cx="75" cy="75" r="66"/></svg><span class="no">03</span><span><h3 data-i18n="s3t">Sản xuất</h3><p data-i18n="s3">Từ ý tưởng tới bản master.</p></span></a>
+      <a class="rv" href="/events"><svg viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="22"/><circle cx="75" cy="75" r="44"/><circle cx="75" cy="75" r="66"/></svg><span class="no">04</span><span><h3 data-i18n="s4t">Sự kiện</h3><p data-i18n="s4">Từ club night tới Boiler Room.</p></span></a>
+      <a class="rv" href="#contact"><svg viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="22"/><circle cx="75" cy="75" r="44"/><circle cx="75" cy="75" r="66"/></svg><span class="no">05</span><span><h3 data-i18n="s5t">Booking</h3><p data-i18n="s5">DJ set, live band, trình diễn kèm visual.</p></span></a>
+      <a class="rv" href="#contact"><svg viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="22"/><circle cx="75" cy="75" r="44"/><circle cx="75" cy="75" r="66"/></svg><span class="no">06</span><span><h3 data-i18n="s6t">Marketing</h3><p data-i18n="s6">Chiến dịch, mạng xã hội, video, thiết kế.</p></span></a>
     </div>
   </div>
 </section>
 
-<!-- 03 · CỬA HÀNG NHẠC SỐ -->
-<section class="sec" id="stores">
-  <div class="wrap">
-    <header class="sec-head split">
-      <div>
-        <p class="label rv"><span class="n">03</span><span data-i18n="stw_k">Nhạc của bạn sẽ nằm ở</span></p>
-        <h2 class="rv" style="margin-top:22px" data-i18n="stw_h"><span class="ln">Mọi nơi người ta</span> <span class="ln"><em>đang nghe nhạc.</em></span></h2>
-      </div>
-      <p class="lead rv" data-i18n="stw_p">Một lần phát hành, nhạc có mặt ở các nền tảng toàn cầu lẫn những nơi người nghe Việt dùng hằng ngày.</p>
-    </header>
-    <ul class="stores rv" aria-label="Các cửa hàng nhạc số">
-      <li>Spotify</li><li>Apple Music</li><li>TikTok</li><li>YouTube Music</li><li>NhacCuaTui</li>
-      <li>Zing MP3</li><li>Amazon Music</li><li>Deezer</li><li>TIDAL</li><li>SoundCloud</li>
-      <li>Beatport</li><li>Pandora</li><li>JOOX</li><li>KKBOX</li><li>Boomplay</li>
-      <li>Anghami</li><li>iHeartRadio</li><li>Snapchat</li><li>Instagram &amp; Facebook</li>
-      <li class="plus" data-i18n="stw_more">+ hơn 200 cửa hàng khác</li>
-    </ul>
-  </div>
-</section>
-
-<!-- 04 · NGHỆ SĨ
-     Tám người nhiều lượt nghe nhất, lấy từ bảng ARTISTS trong artists.html.
-     Đổi ảnh / số ở đó thì nhớ đổi ở đây. -->
+<!-- 02 · NGHỆ SĨ — 12 người nhiều lượt nghe nhất (bảng ARTISTS trong
+     artists.html). Không có JS thì đây là một lưới ảnh bình thường. -->
 <section class="sec" id="artists">
   <div class="wrap">
-    <header class="sec-head split">
+    <div class="head">
       <div>
-        <p class="label rv"><span class="n">04</span><span data-i18n="ar_k">Nghệ sĩ</span></p>
-        <h2 class="rv" style="margin-top:22px" data-i18n="ar_h"><span class="ln">Những nghệ sĩ</span> <span class="ln"><em>đã cùng hợp tác.</em></span></h2>
+        <p class="label rv"><span class="n">02</span><span data-i18n="ar_k">Nghệ sĩ</span></p>
+        <h2 class="rv" data-i18n="ar_h"><span class="ln">Những nghệ sĩ đã từng</span> <span class="ln"><em>phát hành nhạc tại Haustek.</em></span></h2>
       </div>
-      <p class="lead rv" data-i18n="ar_p">Producer, DJ, rapper, vocalist — người Việt trong nước và hải ngoại. Đây là tám cái tên được nghe nhiều nhất.</p>
-    </header>
-    <div class="roster">
-      <a class="art rv" href="/artists"><div class="ph"><img class="duo" src="/artists/lope-dope.webp" alt="Lope Dope" width="800" height="800" loading="lazy" decoding="async"></div><h3>Lope Dope</h3><span class="tr">Đêm Thành Phố</span><span class="st"><b>2,9M</b> SPOTIFY</span></a>
-      <a class="art rv" href="/artists"><div class="ph"><img class="duo" src="/artists/huongmybong.webp" alt="HƯƠNGMYBÔNG" width="800" height="800" loading="lazy" decoding="async"></div><h3>HƯƠNGMYBÔNG</h3><span class="tr">Say Một Đời Vì Em</span><span class="st"><b>1,2M</b> SPOTIFY</span></a>
-      <a class="art rv" href="/artists"><div class="ph"><img class="duo" src="/artists/tro-music.webp" alt="TRO-Music" width="800" height="800" loading="lazy" decoding="async"></div><h3>TRO-Music</h3><span class="tr">ĐÀ LẠT CÒN MƯA KHÔNG EM</span><span class="st"><b>726.031</b> SPOTIFY</span></a>
-      <a class="art rv" href="/artists"><div class="ph"><img class="duo" src="/artists/microwave.webp" alt="Microwave" width="800" height="800" loading="lazy" decoding="async"></div><h3>Microwave</h3><span class="tr">Tìm Lại</span><span class="st"><b>725.526</b> SPOTIFY</span></a>
-      <a class="art rv" href="/artists"><div class="ph"><img class="duo" src="/artists/thien-hi.webp" alt="Thiện Hí" width="800" height="800" loading="lazy" decoding="async"></div><h3>Thiện Hí</h3><span class="tr">Đành Thôi Xa Cách</span><span class="st"><b>523.083</b> SPOTIFY</span></a>
-      <a class="art rv" href="/artists"><div class="ph"><img class="duo" src="/artists/tri-minh.webp" alt="Trí Minh" width="800" height="800" loading="lazy" decoding="async"></div><h3>Trí Minh</h3><span class="tr">Để Gió Cuốn Đi</span><span class="st"><b>312.775</b> SPOTIFY</span></a>
-      <a class="art rv" href="/artists"><div class="ph"><img class="duo" src="/artists/nae-delay.webp" alt="nae &amp; de'lay" width="800" height="800" loading="lazy" decoding="async"></div><h3>nae &amp; de'lay</h3><span class="tr">Đắp Chăn Bông</span><span class="st"><b>308.131</b> SPOTIFY</span></a>
-      <a class="art rv" href="/artists"><div class="ph"><img class="duo" src="/artists/jesilyn.webp" alt="JesiLyn" width="800" height="800" loading="lazy" decoding="async"></div><h3>JesiLyn</h3><span class="tr">Chờ Lời Anh Nói</span><span class="st"><b>177.485</b> SPOTIFY</span></a>
+      <a class="more rv" href="/artists"><span data-i18n="ar_all">Xem cả 26 nghệ sĩ</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
-    <div class="sec-foot rv">
-      <p data-i18n="ar_note">Cùng nhiều producer, songwriter, DJ, VJ và ca sĩ khác, trong nước lẫn ngoài nước.</p>
-      <a class="more" href="/artists"><span data-i18n="ar_all">Xem cả 26 nghệ sĩ</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <div class="ring" id="ring">
+      <div class="ring-stage">
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/lope-dope.webp" alt="Lope Dope" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">Lope Dope</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/huongmybong.webp" alt="HƯƠNGMYBÔNG" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">HƯƠNGMYBÔNG</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/tro-music.webp" alt="TRO-Music" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">TRO-Music</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/microwave.webp" alt="Microwave" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">Microwave</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/thien-hi.webp" alt="Thiện Hí" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">Thiện Hí</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/tri-minh.webp" alt="Trí Minh" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">Trí Minh</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/nae-delay.webp" alt="nae &amp; de'lay" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">nae &amp; de'lay</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/jesilyn.webp" alt="JesiLyn" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">JesiLyn</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/beebb.webp" alt="BeeBB" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">BeeBB</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/cap-anh-tai.webp" alt="Cáp Anh Tài" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">Cáp Anh Tài</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/ha-quynh-nhu.webp" alt="Hà Quỳnh Như" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">Hà Quỳnh Như</span></a>
+        <a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="/artists/resq.webp" alt="ResQ" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">ResQ</span></a>
+      </div>
+    </div>
+    <p class="ring-hint" aria-hidden="true" data-i18n="drag">Kéo để xoay</p>
+  </div>
+</section>
+
+<!-- 03 · CỬA HÀNG NHẠC SỐ — quả cầu chữ; hai nền tảng Việt tô đỏ -->
+<section class="sec" id="stores">
+  <div class="wrap reach">
+    <div>
+      <p class="label rv"><span class="n">03</span><span data-i18n="stw_k">Nhạc của bạn sẽ nằm ở</span></p>
+      <h2 class="rv" style="margin-top:20px" data-i18n="stw_h"><span class="ln">Mọi nơi người ta</span> <span class="ln"><em>đang nghe nhạc.</em></span></h2>
+      <p class="big rv"><span data-count="200" data-suffix="+">200+</span><small data-i18n="stw_more">cửa hàng nhạc số, một lần phát hành</small></p>
+    </div>
+    <div class="orb" id="orb" aria-label="Các cửa hàng nhạc số">
+      <span class="orb-core" aria-hidden="true"></span>
+      <ul>
+        <li>Spotify</li><li>Apple Music</li><li>TikTok</li><li>YouTube Music</li><li class="vn">NhacCuaTui</li>
+        <li class="vn">Zing MP3</li><li>Amazon Music</li><li>Deezer</li><li>TIDAL</li><li>SoundCloud</li>
+        <li>Beatport</li><li>Pandora</li><li>JOOX</li><li>KKBOX</li><li>Boomplay</li>
+        <li>Anghami</li><li>iHeartRadio</li><li>Snapchat</li><li>Instagram</li><li>Facebook</li>
+      </ul>
     </div>
   </div>
 </section>
 
-<!-- 05 · SỰ KIỆN — số liệu đếm từ bảng ARCHIVE trong events.html -->
+<!-- 04 · SỰ KIỆN — số đếm từ bảng ARCHIVE trong events.html -->
 <section class="sec" id="events">
   <div class="wrap">
-    <header class="sec-head split">
+    <div class="head">
       <div>
-        <p class="label rv"><span class="n">05</span><span data-i18n="ev_k">Sự kiện</span></p>
-        <h2 class="rv" style="margin-top:22px" data-i18n="ev_h"><span class="ln">Sân khấu</span> <span class="ln"><em>chúng tôi từng dàn dựng.</em></span></h2>
+        <p class="label rv"><span class="n">04</span><span data-i18n="ev_k">Sự kiện</span></p>
+        <h2 class="rv" data-i18n="ev_h"><span class="ln">Sân khấu</span> <span class="ln"><em>chúng tôi từng dàn dựng.</em></span></h2>
+        <dl class="ev-stats rv">
+          <div><dd data-count="249">249</dd><dt data-i18n="es1">đêm diễn</dt></div>
+          <div><dd data-count="38">38</dd><dt data-i18n="es3">đêm quốc tế</dt></div>
+          <div><dd data-count="4">4</dd><dt data-i18n="es4">đêm cháy vé</dt></div>
+        </dl>
       </div>
-      <p class="lead rv" data-i18n="ev_p">Từ những đêm techno nhỏ ở Hà Nội, Sài Gòn tới Boiler Room và các tên tuổi Anjunadeep — toàn bộ nằm trong hồ sơ promoter của Haustek trên Resident Advisor.</p>
-    </header>
-    <dl class="ev-stats rv">
-      <div><dt data-i18n="es1">Đêm diễn</dt><dd>249</dd></div>
-      <div><dt data-i18n="es2">Năm liên tục</dt><dd>2015–2025</dd></div>
-      <div><dt data-i18n="es3">Đêm có nghệ sĩ quốc tế</dt><dd>38</dd></div>
-      <div><dt data-i18n="es4">Đêm cháy vé</dt><dd>4</dd></div>
-    </dl>
+      <a class="more rv" href="/events"><span data-i18n="ev_all">Xem toàn bộ sự kiện</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
     <div class="posters">
-      <a class="pst rv" href="/events"><div class="ph"><span class="so">SOLD OUT</span><img class="duo" src="/events/cosmic-gate.webp" alt="Cosmic Gate tại Boujee Station, Sài Gòn" width="720" height="900" loading="lazy" decoding="async"></div><h3>Cosmic Gate</h3><span class="mt">Boujee.SGN · 16.09.2023</span></a>
-      <a class="pst rv" href="/events"><div class="ph"><span class="so">SOLD OUT</span><img class="duo" src="/events/nick-warren.webp" alt="Nick Warren — đêm ra mắt Mixmag Asia Việt Nam" width="720" height="900" loading="lazy" decoding="async"></div><h3>Nick Warren</h3><span class="mt">Aura Saigon · 25.11.2022</span></a>
-      <a class="pst rv" href="/events"><div class="ph"><img class="duo" src="/events/boiler-room.webp" alt="Boiler Room Hồ Chí Minh" width="720" height="900" loading="lazy" decoding="async"></div><h3>Boiler Room</h3><span class="mt">Khu 13 · 19.10.2019</span></a>
-      <a class="pst rv" href="/events"><div class="ph"><img class="duo" src="/events/ben-bohmer.webp" alt="Ben Böhmer" width="720" height="900" loading="lazy" decoding="async"></div><h3>Ben Böhmer</h3><span class="mt">Anjunadeep · 05.2019</span></a>
-    </div>
-    <div class="names rv">
-      <p class="label plain" data-i18n="ev_names">Cũng từng đưa về Việt Nam</p>
-      <p><b>Aly &amp; Fila</b> <i>●</i> <b>Oliver Smith</b> <i>●</i> <b>Paul Thomas</b> <i>●</i> <b>Roy Rosenfeld</b> <i>●</i> <b>Marsh</b> <i>●</i> <b>John 00 Fleming</b> <i>●</i> <b>Truncate</b> <i>●</i> <b>Xhin</b> <i>●</i> <b>Milo Raad</b></p>
-    </div>
-    <div class="sec-foot rv">
-      <p data-i18n="ev_note">Video các set, lưu trữ từng đêm theo năm, và cách đặt Haustek dựng một đêm cho bạn.</p>
-      <a class="more" href="/events"><span data-i18n="ev_all">Xem toàn bộ sự kiện &amp; video</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="pst rv" href="/events"><span class="ph"><span class="so">SOLD OUT</span><img class="duo" src="/events/cosmic-gate.webp" alt="Cosmic Gate tại Boujee Station, Sài Gòn" width="720" height="900" loading="lazy" decoding="async"></span><h3>Cosmic Gate</h3><span class="mt">Boujee.SGN · 2023</span></a>
+      <a class="pst rv" href="/events"><span class="ph"><span class="so">SOLD OUT</span><img class="duo" src="/events/nick-warren.webp" alt="Nick Warren — đêm ra mắt Mixmag Asia Việt Nam" width="720" height="900" loading="lazy" decoding="async"></span><h3>Nick Warren</h3><span class="mt">Aura Saigon · 2022</span></a>
+      <a class="pst rv" href="/events"><span class="ph"><img class="duo" src="/events/boiler-room.webp" alt="Boiler Room Hồ Chí Minh" width="720" height="900" loading="lazy" decoding="async"></span><h3>Boiler Room</h3><span class="mt">Khu 13 · 2019</span></a>
+      <a class="pst rv" href="/events"><span class="ph"><img class="duo" src="/events/ben-bohmer.webp" alt="Ben Böhmer" width="720" height="900" loading="lazy" decoding="async"></span><h3>Ben Böhmer</h3><span class="mt">Anjunadeep · 2019</span></a>
     </div>
   </div>
 </section>
 
-<!-- CÂU CAM KẾT -->
-<section class="sec pull">
-  <svg class="ripple" viewBox="0 0 1000 1000" aria-hidden="true">
-    <circle cx="500" cy="500" r="120" stroke-opacity=".07"/>
-    <circle cx="500" cy="500" r="220" stroke-opacity=".06"/>
-    <circle cx="500" cy="500" r="320" stroke-opacity=".05"/>
-    <circle cx="500" cy="500" r="420" stroke-opacity=".04"/>
-  </svg>
-  <div class="wrap">
-    <blockquote class="rv" data-i18n="pq"><span class="ln">“Bạn lo phần sáng tạo.</span> <span class="ln"><em>Chúng tôi lo phần còn lại.”</em></span></blockquote>
-    <p class="label rv" data-i18n="pq_by">Lời cam kết của Haustek</p>
-  </div>
-</section>
-
-<!-- 06 · HỎI ĐÁP -->
+<!-- 05 · HỎI ĐÁP -->
 <section class="sec" id="faq">
   <div class="wrap faq-grid">
-    <div class="faq-side">
-      <p class="label rv"><span class="n">06</span><span data-i18n="fq_k">Hỏi đáp</span></p>
-      <h2 class="rv" style="margin-top:22px" data-i18n="fq_h"><span class="ln">Hỏi nhanh,</span> <span class="ln"><em>đáp gọn.</em></span></h2>
-      <p class="rv" data-i18n="fq_p">Không thấy câu bạn cần? Mail <a href="mailto:mgmt@haustek-group.com">mgmt@haustek-group.com</a> — có người đọc và trả lời.</p>
+    <div>
+      <p class="label rv"><span class="n">05</span><span data-i18n="fq_k">Hỏi đáp</span></p>
+      <h2 class="rv" style="margin-top:20px" data-i18n="fq_h"><span class="ln">Hỏi nhanh,</span> <span class="ln"><em>đáp gọn.</em></span></h2>
     </div>
     <div class="faq rv">
       <details>
-        <summary><span data-i18n="q1">Gửi demo cho Haustek bằng cách nào?</span><span class="pm" aria-hidden="true"></span></summary>
-        <p class="a" data-i18n="a1">Mail <a href="mailto:mgmt@haustek-group.com?subject=%5BDEMO%5D%20">mgmt@haustek-group.com</a> kèm link nghe riêng tư (SoundCloud để riêng tư, Google Drive…) và vài dòng về bạn. Đừng đính kèm file. Demo nào gửi tới, chúng tôi cũng nghe.</p>
+        <summary><span data-i18n="q1">Muốn phát hành nhạc cùng Haustek thì bắt đầu thế nào?</span><span class="pm" aria-hidden="true"></span></summary>
+        <p class="a" data-i18n="a1">Mail <a href="mailto:mgmt@haustek-group.com?subject=%5BPH%C3%81T%20H%C3%80NH%5D%20">mgmt@haustek-group.com</a> kèm link nghe và vài dòng về bạn — có người nghe và trả lời.</p>
       </details>
       <details>
         <summary><span data-i18n="q2">Nhạc của tôi sẽ lên những đâu?</span><span class="pm" aria-hidden="true"></span></summary>
-        <p class="a" data-i18n="a2">Spotify, Apple Music, TikTok, YouTube Music, NhacCuaTui, Zing MP3… — tổng cộng hơn 200 cửa hàng nhạc số toàn cầu.</p>
+        <p class="a" data-i18n="a2">Spotify, Apple Music, TikTok, YouTube Music, NhacCuaTui, Zing MP3… — hơn 200 cửa hàng nhạc số.</p>
       </details>
       <details>
         <summary><span data-i18n="q3">Bao lâu thì nhạc lên sóng?</span><span class="pm" aria-hidden="true"></span></summary>
@@ -502,21 +414,17 @@
       </details>
       <details>
         <summary><span data-i18n="q4">Tôi có giữ bản quyền nhạc của mình không?</span><span class="pm" aria-hidden="true"></span></summary>
-        <p class="a" data-i18n="a4">Có — tác phẩm vẫn là của bạn. Điều khoản và tỷ lệ chia thống nhất rõ trước khi phát hành, không dòng chữ nhỏ.</p>
+        <p class="a" data-i18n="a4">Có — tác phẩm vẫn là của bạn. Điều khoản và tỷ lệ chia thống nhất rõ trước khi phát hành.</p>
       </details>
       <details>
         <summary><span data-i18n="q5">Haustek có nhận booking và tổ chức sự kiện không?</span><span class="pm" aria-hidden="true"></span></summary>
-        <p class="a" data-i18n="a5">Có — DJ set, live band, trình diễn kèm visual. Mail <a href="mailto:mgmt@haustek-group.com?subject=%5BBOOKING%5D%20">mgmt@haustek-group.com</a>, hoặc xem <a href="/events">những đêm đã làm</a>.</p>
-      </details>
-      <details>
-        <summary><span data-i18n="q6">Tôi có ý tưởng nhưng chưa đủ người làm, Haustek giúp được không?</span><span class="pm" aria-hidden="true"></span></summary>
-        <p class="a" data-i18n="a6">Được — đội sản xuất của Haustek bù đúng phần bạn thiếu, từ phối khí đến bản master.</p>
+        <p class="a" data-i18n="a5">Có — DJ set, live band, trình diễn kèm visual. Xem <a href="/events">những đêm đã làm</a>.</p>
       </details>
     </div>
   </div>
 </section>
 
-<!-- 07 · LIÊN HỆ -->
+<!-- 06 · LIÊN HỆ — mỗi lối mở email có sẵn tiêu đề để hộp thư lọc được ngay -->
 <section class="sec contact" id="contact">
   <svg class="ripple" viewBox="0 0 1000 1000" aria-hidden="true">
     <circle cx="500" cy="500" r="90" stroke-opacity=".12"/>
@@ -524,30 +432,32 @@
     <circle cx="500" cy="500" r="270" stroke-opacity=".08"/>
     <circle cx="500" cy="500" r="360" stroke-opacity=".06"/>
     <circle cx="500" cy="500" r="450" stroke-opacity=".045"/>
+    <circle class="wave" cx="500" cy="500" r="450" stroke-opacity=".5"/>
+    <circle class="wave w2" cx="500" cy="500" r="450" stroke-opacity=".5"/>
+    <circle class="wave w3" cx="500" cy="500" r="450" stroke-opacity=".5"/>
+    <circle class="core" cx="500" cy="500" r="6"/>
   </svg>
   <div class="wrap">
-    <p class="label rv"><span class="n">07</span><span data-i18n="ct_k">Liên hệ</span></p>
-    <h2 class="rv" style="margin-top:22px" data-i18n="ct_h"><span class="ln">Bạn có bản nhạc?</span> <span class="ln"><em>Chúng tôi có sân khấu.</em></span></h2>
+    <p class="label rv"><span class="n">06</span><span data-i18n="ct_k">Liên hệ</span></p>
+    <h2 class="rv" style="margin-top:20px" data-i18n="ct_h"><span class="ln">Bạn có bản nhạc?</span> <span class="ln"><em>Chúng tôi có sân khấu.</em></span></h2>
     <a class="mail rv" href="mailto:mgmt@haustek-group.com">mgmt@haustek-group.com</a>
-    <!-- Mỗi lối gửi một email có sẵn tiêu đề [DEMO] / [PHÁT HÀNH] / [BOOKING]
-         để hộp thư bên Haustek lọc được ngay, người gửi không phải nghĩ. -->
     <div class="routes">
-      <a class="route rv" href="mailto:mgmt@haustek-group.com?subject=%5BDEMO%5D%20">
-        <span class="code">01</span>
-        <h3 data-i18n="r1t">Gửi demo</h3>
-        <p data-i18n="r1">Link nghe riêng tư và vài dòng về bạn. Không cần đính kèm file.</p>
-        <span class="go"><span data-i18n="r_go">Viết email</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
       <a class="route rv" href="mailto:mgmt@haustek-group.com?subject=%5BPH%C3%81T%20H%C3%80NH%5D%20">
-        <span class="code">02</span>
-        <h3 data-i18n="r2t">Phát hành &amp; label</h3>
-        <p data-i18n="r2">Đã có bản thu, cần đưa lên hơn 200 cửa hàng nhạc số và một đội lo quảng bá.</p>
+        <span class="code">01</span>
+        <h3 data-i18n="r1t">Phát hành nhạc</h3>
+        <p data-i18n="r1">Đưa bản thu lên 200+ cửa hàng nhạc số.</p>
         <span class="go"><span data-i18n="r_go">Viết email</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
       <a class="route rv" href="mailto:mgmt@haustek-group.com?subject=%5BBOOKING%5D%20">
+        <span class="code">02</span>
+        <h3 data-i18n="r2t">Booking &amp; sự kiện</h3>
+        <p data-i18n="r2">DJ set, live, hoặc cả một đêm diễn.</p>
+        <span class="go"><span data-i18n="r_go">Viết email</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="route rv" href="mailto:mgmt@haustek-group.com?subject=%5BH%E1%BB%A2P%20T%C3%81C%5D%20">
         <span class="code">03</span>
-        <h3 data-i18n="r3t">Booking &amp; sự kiện</h3>
-        <p data-i18n="r3">DJ set, live, hoặc cả một đêm diễn cho venue và nhãn hàng.</p>
+        <h3 data-i18n="r3t">Hợp tác thương hiệu</h3>
+        <p data-i18n="r3">Nhạc, sự kiện và nội dung cho nhãn hàng.</p>
         <span class="go"><span data-i18n="r_go">Viết email</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
     </div>
@@ -593,7 +503,7 @@
       </div>
     </div>
     <div class="foot-bar">
-      <span>© 2026 Haustek · California → Việt Nam · Since 2017</span>
+      <span>© 2026 Haustek · Việt Nam · Since 2017</span>
       <a href="mailto:mgmt@haustek-group.com">mgmt@haustek-group.com</a>
     </div>
   </div>
@@ -601,6 +511,7 @@
 </footer>
 
 <script src="/assets/site.js"></script>
+<script src="/assets/field.js"></script>
 <script>
 /* Link cũ từ thời trang chủ còn router (#/events, #/submit) — đưa về đúng chỗ */
 if(location.hash.startsWith('#/events'))location.replace('/events');
@@ -612,65 +523,45 @@ const I18N={
     _desc:"Haustek — music label & distribution từ 2017. Làm sự kiện, sản xuất, phát hành, quảng bá và tư vấn chiến lược cho âm nhạc. Đưa nhạc Việt lên Spotify, Apple Music, TikTok, NhacCuaTui, Zing MP3 và hơn 200 cửa hàng nhạc số khắp thế giới.",
     hero_k:"Music label &amp; distribution · Est. 2017",
     h1:'<span class="ln">Để nhạc Việt</span> <span class="ln"><em>vang xa</em> hơn.</span>',
-    hero_p:"Haustek đưa nhạc của nghệ sĩ Việt, trong nước lẫn hải ngoại, lên hơn 200 cửa hàng nhạc số — từ Spotify, TikTok đến NhacCuaTui và Zing MP3. Phát hành, label, sự kiện, sản xuất: <strong>một đầu mối</strong>.",
-    cta_work:"Hợp tác với Haustek",cta_artists:"Nghe nghệ sĩ",
-    st_streams:"Lượt nghe",st_rel:"Bản phát hành",st_rel_n:"7.000+",st_stores:"Cửa hàng nhạc số",st_nights:"Đêm diễn từ 2015",
-    ab_k:"Về Haustek",
-    ab_h:'<span class="ln">Gốc rễ toàn cầu,</span> <span class="ln"><em>thuộc về nhạc Việt.</em></span>',
-    ab_p:"Gần một thập kỷ đưa nhạc Việt ra thế giới. Khởi đầu từ những hầm techno, đến ánh sáng của những sân khấu lớn.",
-    f1:"Thành lập",f1v:"2017 · California → Việt Nam",f2:"Người nghe",f2v:"3.500.000+ mỗi tháng",
-    f3:"Bản ghi đi xa nhất",f3v:"Đêm Thành Phố — 2.931.346 lượt nghe",
-    v1t:"Minh bạch",v1:"Số liệu rõ ràng, điều khoản không chữ nhỏ. Nghệ sĩ giữ quyền sở hữu tác phẩm.",
-    v2t:"Đồng hành",v2:"Không phải nền tảng tự phục vụ — là con người nghe từng demo. Demo nào gửi tới, chúng tôi cũng nghe.",
-    v3t:"Hai thế giới",v3:"California ↔ Việt Nam. Chuẩn quốc tế trong vận hành, chất Việt trong âm nhạc.",
-    v4t:"Underground gốc",v4:"Sinh ra từ hầm techno và những đêm diễn nhỏ. Dù lớn đến đâu, thái độ vẫn thuộc về văn hoá ngầm.",
+    hero_sub:"Phát hành · Label · Sự kiện · Sản xuất — <strong>một đầu mối</strong>.",
+    cta_work:"Hợp tác với Haustek",cta_artists:"Xem nghệ sĩ",
+    beat_on:"Bật beat",beat_off:"Tắt beat",beat_hint:"124 BPM · rê chuột tạo sóng",beat_aria_on:"Bật beat",beat_aria_off:"Tắt beat",
+    st_streams:"Lượt nghe",st_rel:"Bản phát hành",st_stores:"Cửa hàng nhạc số",st_nights:"Đêm diễn",
     sv_k:"Dịch vụ",
-    sv_h:'<span class="ln">Bạn cần gì cho âm nhạc,</span> <span class="ln"><em>Haustek có ở đây.</em></span>',
-    sv_p:"Sáu mảng việc, một đầu mối. Bạn lo phần nhạc — từ bản thu đầu tiên tới đêm diễn cháy vé, phần còn lại có người lo.",
-    s1t:"Phát hành &amp; khai thác bản ghi",s1:"Nhạc của bạn lên hơn 200 cửa hàng số — Spotify, Apple Music, TikTok, Zing MP3 và nhiều nơi khác. Đúng hẹn, số liệu công khai, báo cáo rõ.",s1c:"Báo cáo doanh thu",
-    s2t:"Hãng thu âm",s2:"Tìm chất riêng, dựng hình ảnh, vạch lộ trình dài hơi. Demo gửi tới chắc chắn có người nghe.",s2c:"Định hướng nghệ sĩ",
-    s3t:"Sản xuất âm nhạc",s3:"Kỹ sư âm thanh và nhạc sĩ từ các nhạc viện — nhạc phim, jingle, quảng cáo, từ ý tưởng đến bản master.",s3c1:"Phối khí",s3c2:"Nhạc quảng cáo",
-    s4t:"Tổ chức sự kiện",s4:'Từ club night trong nước tới Boiler Room và United We Stream Asia — 249 đêm từ 2015. <a href="/events">Xem những đêm đã làm →</a>',
-    s5t:"Booking nghệ sĩ",s5:"DJ set, live band, trình diễn kèm visual — cho nhãn hàng, festival hay không gian riêng.",
-    s6t:"Marketing &amp; truyền thông",s6:"Chiến lược dựa trên dữ liệu, chiến dịch digital, quản lý mạng xã hội, content và sản xuất media — video, ảnh, thiết kế. Trọn gói cho một bản phát hành hay cả một thương hiệu.",s6c1:"Chiến lược",
+    sv_h:'<span class="ln">Bạn lo phần nhạc.</span> <span class="ln"><em>Phần còn lại có Haustek.</em></span>',
+    s1t:"Phát hành",s1:"Lên 200+ cửa hàng nhạc số, đúng hẹn, số liệu rõ.",
+    s2t:"Hãng thu âm",s2:"Tìm chất riêng, vạch lộ trình dài hơi.",
+    s3t:"Sản xuất",s3:"Từ ý tưởng tới bản master.",
+    s4t:"Sự kiện",s4:"Từ club night tới Boiler Room.",
+    s5t:"Booking",s5:"DJ set, live band, trình diễn kèm visual.",
+    s6t:"Marketing",s6:"Chiến dịch, mạng xã hội, video, thiết kế.",
+    ar_k:"Nghệ sĩ",
+    ar_h:'<span class="ln">Những nghệ sĩ đã từng</span> <span class="ln"><em>phát hành nhạc tại Haustek.</em></span>',
+    ar_all:"Xem cả 26 nghệ sĩ",drag:"Kéo để xoay",
     stw_k:"Nhạc của bạn sẽ nằm ở",
     stw_h:'<span class="ln">Mọi nơi người ta</span> <span class="ln"><em>đang nghe nhạc.</em></span>',
-    stw_p:"Một lần phát hành, nhạc có mặt ở các nền tảng toàn cầu lẫn những nơi người nghe Việt dùng hằng ngày.",
-    stw_more:"+ hơn 200 cửa hàng khác",
-    ar_k:"Nghệ sĩ",
-    ar_h:'<span class="ln">Những nghệ sĩ</span> <span class="ln"><em>đã cùng hợp tác.</em></span>',
-    ar_p:"Producer, DJ, rapper, vocalist — người Việt trong nước và hải ngoại. Đây là tám cái tên được nghe nhiều nhất.",
-    ar_note:"Cùng nhiều producer, songwriter, DJ, VJ và ca sĩ khác, trong nước lẫn ngoài nước.",
-    ar_all:"Xem cả 26 nghệ sĩ",
+    stw_more:"cửa hàng nhạc số, một lần phát hành",
     ev_k:"Sự kiện",
     ev_h:'<span class="ln">Sân khấu</span> <span class="ln"><em>chúng tôi từng dàn dựng.</em></span>',
-    ev_p:"Từ những đêm techno nhỏ ở Hà Nội, Sài Gòn tới Boiler Room và các tên tuổi Anjunadeep — toàn bộ nằm trong hồ sơ promoter của Haustek trên Resident Advisor.",
-    es1:"Đêm diễn",es2:"Năm liên tục",es3:"Đêm có nghệ sĩ quốc tế",es4:"Đêm cháy vé",
-    ev_names:"Cũng từng đưa về Việt Nam",
-    ev_note:"Video các set, lưu trữ từng đêm theo năm, và cách đặt Haustek dựng một đêm cho bạn.",
-    ev_all:"Xem toàn bộ sự kiện &amp; video",
-    pq:'<span class="ln">“Bạn lo phần sáng tạo.</span> <span class="ln"><em>Chúng tôi lo phần còn lại.”</em></span>',
-    pq_by:"Lời cam kết của Haustek",
+    es1:"đêm diễn",es3:"đêm quốc tế",es4:"đêm cháy vé",
+    ev_all:"Xem toàn bộ sự kiện",
     fq_k:"Hỏi đáp",
     fq_h:'<span class="ln">Hỏi nhanh,</span> <span class="ln"><em>đáp gọn.</em></span>',
-    fq_p:'Không thấy câu bạn cần? Mail <a href="mailto:mgmt@haustek-group.com">mgmt@haustek-group.com</a> — có người đọc và trả lời.',
-    q1:"Gửi demo cho Haustek bằng cách nào?",
-    a1:'Mail <a href="mailto:mgmt@haustek-group.com?subject=%5BDEMO%5D%20">mgmt@haustek-group.com</a> kèm link nghe riêng tư (SoundCloud để riêng tư, Google Drive…) và vài dòng về bạn. Đừng đính kèm file. Demo nào gửi tới, chúng tôi cũng nghe.',
+    q1:"Muốn phát hành nhạc cùng Haustek thì bắt đầu thế nào?",
+    a1:'Mail <a href="mailto:mgmt@haustek-group.com?subject=%5BPH%C3%81T%20H%C3%80NH%5D%20">mgmt@haustek-group.com</a> kèm link nghe và vài dòng về bạn — có người nghe và trả lời.',
     q2:"Nhạc của tôi sẽ lên những đâu?",
-    a2:"Spotify, Apple Music, TikTok, YouTube Music, NhacCuaTui, Zing MP3… — tổng cộng hơn 200 cửa hàng nhạc số toàn cầu.",
+    a2:"Spotify, Apple Music, TikTok, YouTube Music, NhacCuaTui, Zing MP3… — hơn 200 cửa hàng nhạc số.",
     q3:"Bao lâu thì nhạc lên sóng?",
     a3:"Nhanh nhất 24–36 giờ, thường 1–2 tuần. Nên gửi trước 3–4 tuần để kịp pitch playlist.",
     q4:"Tôi có giữ bản quyền nhạc của mình không?",
-    a4:"Có — tác phẩm vẫn là của bạn. Điều khoản và tỷ lệ chia thống nhất rõ trước khi phát hành, không dòng chữ nhỏ.",
+    a4:"Có — tác phẩm vẫn là của bạn. Điều khoản và tỷ lệ chia thống nhất rõ trước khi phát hành.",
     q5:"Haustek có nhận booking và tổ chức sự kiện không?",
-    a5:'Có — DJ set, live band, trình diễn kèm visual. Mail <a href="mailto:mgmt@haustek-group.com?subject=%5BBOOKING%5D%20">mgmt@haustek-group.com</a>, hoặc xem <a href="/events">những đêm đã làm</a>.',
-    q6:"Tôi có ý tưởng nhưng chưa đủ người làm, Haustek giúp được không?",
-    a6:"Được — đội sản xuất của Haustek bù đúng phần bạn thiếu, từ phối khí đến bản master.",
+    a5:'Có — DJ set, live band, trình diễn kèm visual. Xem <a href="/events">những đêm đã làm</a>.',
     ct_k:"Liên hệ",
     ct_h:'<span class="ln">Bạn có bản nhạc?</span> <span class="ln"><em>Chúng tôi có sân khấu.</em></span>',
-    r1t:"Gửi demo",r1:"Link nghe riêng tư và vài dòng về bạn. Không cần đính kèm file.",
-    r2t:"Phát hành &amp; label",r2:"Đã có bản thu, cần đưa lên hơn 200 cửa hàng nhạc số và một đội lo quảng bá.",
-    r3t:"Booking &amp; sự kiện",r3:"DJ set, live, hoặc cả một đêm diễn cho venue và nhãn hàng.",
+    r1t:"Phát hành nhạc",r1:"Đưa bản thu lên 200+ cửa hàng nhạc số.",
+    r2t:"Booking &amp; sự kiện",r2:"DJ set, live, hoặc cả một đêm diễn.",
+    r3t:"Hợp tác thương hiệu",r3:"Nhạc, sự kiện và nội dung cho nhãn hàng.",
     r_go:"Viết email"
   },
   en:{
@@ -678,76 +569,222 @@ const I18N={
     _desc:"Haustek — music label & distribution since 2017. Events, production, releases, promotion and strategy for music. Vietnamese music on Spotify, Apple Music, TikTok, NhacCuaTui, Zing MP3 and 200+ digital stores worldwide.",
     hero_k:"Music label &amp; distribution · Est. 2017",
     h1:'<span class="ln">Made in Vietnam.</span> <span class="ln"><em>Heard</em> worldwide.</span>',
-    hero_p:"Haustek takes music by Vietnamese artists, at home and abroad, to 200+ digital stores — from Spotify and TikTok to NhacCuaTui and Zing MP3. Distribution, label, events, production: <strong>one place</strong>.",
-    cta_work:"Work with Haustek",cta_artists:"Hear the artists",
-    st_streams:"Streams",st_rel:"Releases",st_rel_n:"7,000+",st_stores:"Digital stores",st_nights:"Nights since 2015",
-    ab_k:"About Haustek",
-    ab_h:'<span class="ln">Global roots,</span> <span class="ln"><em>devoted to Vietnamese music.</em></span>',
-    ab_p:"Nearly a decade taking Vietnamese music to the world. It began in techno basements and grew into the lights of the big stages.",
-    f1:"Founded",f1v:"2017 · California → Vietnam",f2:"Listeners",f2v:"3,500,000+ monthly",
-    f3:"Farthest-reaching record",f3v:"Đêm Thành Phố — 2,931,346 streams",
-    v1t:"Transparency",v1:"Clear numbers, no fine print. Artists keep ownership of their work.",
-    v2t:"Partnership",v2:"Not a self-serve platform — people who listen to every demo. Every demo sent gets heard.",
-    v3t:"Two worlds",v3:"California ↔ Vietnam. International standards in how we work, Vietnamese character in the music.",
-    v4t:"Underground roots",v4:"Born in techno basements and small club nights. However big it gets, the attitude stays underground.",
+    hero_sub:"Distribution · Label · Events · Production — <strong>one place</strong>.",
+    cta_work:"Work with Haustek",cta_artists:"See the artists",
+    beat_on:"Play the beat",beat_off:"Stop the beat",beat_hint:"124 BPM · move to make waves",beat_aria_on:"Play the beat",beat_aria_off:"Stop the beat",
+    st_streams:"Streams",st_rel:"Releases",st_stores:"Digital stores",st_nights:"Nights",
     sv_k:"Services",
-    sv_h:'<span class="ln">Whatever your music needs,</span> <span class="ln"><em>Haustek has it here.</em></span>',
-    sv_p:"Six practices, one point of contact. You handle the music — from the first recording to a sold-out night, the rest is taken care of.",
-    s1t:"Distribution &amp; recordings",s1:"Your music lands in 200+ digital stores — Spotify, Apple Music, TikTok, Zing MP3 and more. On time, open numbers, clear reports.",s1c:"Royalty reports",
-    s2t:"Record label",s2:"We find your sound, build your image, map the long run. Every demo gets listened to.",s2c:"Artist development",
-    s3t:"Music production",s3:"Conservatory-trained engineers and musicians — film scores, jingles, brand music, idea to master.",s3c1:"Arrangement",s3c2:"Brand music",
-    s4t:"Event production",s4:'From local club nights to Boiler Room and United We Stream Asia — 249 nights since 2015. <a href="/events">See the nights →</a>',
-    s5t:"Artist booking",s5:"DJ sets, live bands, performances with visuals — for brands, festivals or your own space.",
-    s6t:"Marketing &amp; communications",s6:"Data-driven strategy, digital campaigns, social media management, content and media production — video, photo, design. End to end, for one release or a whole brand.",s6c1:"Strategy",
+    sv_h:'<span class="ln">You handle the music.</span> <span class="ln"><em>Haustek handles the rest.</em></span>',
+    s1t:"Distribution",s1:"200+ digital stores, on time, clear numbers.",
+    s2t:"Record label",s2:"Find your sound, map the long run.",
+    s3t:"Production",s3:"From idea to master.",
+    s4t:"Events",s4:"From club nights to Boiler Room.",
+    s5t:"Booking",s5:"DJ sets, live bands, shows with visuals.",
+    s6t:"Marketing",s6:"Campaigns, social, video, design.",
+    ar_k:"Artists",
+    ar_h:'<span class="ln">Artists who have</span> <span class="ln"><em>released music with Haustek.</em></span>',
+    ar_all:"See all 26 artists",drag:"Drag to spin",
     stw_k:"Your music will live on",
     stw_h:'<span class="ln">Everywhere people</span> <span class="ln"><em>are listening.</em></span>',
-    stw_p:"One release puts your music on the global platforms and on the ones Vietnamese listeners use every day.",
-    stw_more:"+ 200 more stores",
-    ar_k:"Artists",
-    ar_h:'<span class="ln">The artists</span> <span class="ln"><em>we have worked with.</em></span>',
-    ar_p:"Producers, DJs, rappers, vocalists — Vietnamese, at home and abroad. These are the eight most-streamed names.",
-    ar_note:"Along with many more producers, songwriters, DJs, VJs and vocalists at home and abroad.",
-    ar_all:"See all 26 artists",
+    stw_more:"digital stores, one release",
     ev_k:"Events",
     ev_h:'<span class="ln">Stages</span> <span class="ln"><em>we have built.</em></span>',
-    ev_p:"From small techno nights in Hanoi and Saigon to Boiler Room and Anjunadeep names — all of it on Haustek's promoter history on Resident Advisor.",
-    es1:"Nights",es2:"Years running",es3:"Nights with international artists",es4:"Sold-out nights",
-    ev_names:"Also brought to Vietnam",
-    ev_note:"Set videos, the full night-by-night archive, and how to book Haustek to build a night for you.",
-    ev_all:"See all events &amp; videos",
-    pq:'<span class="ln">“You handle the creative.</span> <span class="ln"><em>We handle the rest.”</em></span>',
-    pq_by:"A commitment from Haustek",
+    es1:"nights",es3:"international nights",es4:"sold out",
+    ev_all:"See all events",
     fq_k:"FAQ",
     fq_h:'<span class="ln">Quick questions,</span> <span class="ln"><em>straight answers.</em></span>',
-    fq_p:'Can\'t find your question? Email <a href="mailto:mgmt@haustek-group.com">mgmt@haustek-group.com</a> — a person reads and replies.',
-    q1:"How do I send Haustek a demo?",
-    a1:'Email <a href="mailto:mgmt@haustek-group.com?subject=%5BDEMO%5D%20">mgmt@haustek-group.com</a> with a private listening link (private SoundCloud, Google Drive…) and a few lines about you. No attachments, please. Every demo sent gets heard.',
+    q1:"How do I start releasing music with Haustek?",
+    a1:'Email <a href="mailto:mgmt@haustek-group.com?subject=%5BPH%C3%81T%20H%C3%80NH%5D%20">mgmt@haustek-group.com</a> with a listening link and a few lines about you — a person listens and replies.',
     q2:"Where will my music be available?",
-    a2:"Spotify, Apple Music, TikTok, YouTube Music, NhacCuaTui, Zing MP3… — 200+ digital stores worldwide.",
+    a2:"Spotify, Apple Music, TikTok, YouTube Music, NhacCuaTui, Zing MP3… — 200+ digital stores.",
     q3:"How long until my music goes live?",
     a3:"As fast as 24–36 hours, usually 1–2 weeks. Send 3–4 weeks ahead to allow for playlist pitching.",
     q4:"Do I keep the rights to my music?",
-    a4:"Yes — the work stays yours. Terms and splits are agreed clearly before release, no fine print.",
+    a4:"Yes — the work stays yours. Terms and splits are agreed clearly before release.",
     q5:"Does Haustek take bookings and produce events?",
-    a5:'Yes — DJ sets, live bands, performances with visuals. Email <a href="mailto:mgmt@haustek-group.com?subject=%5BBOOKING%5D%20">mgmt@haustek-group.com</a>, or see <a href="/events">the nights we have built</a>.',
-    q6:"I have an idea but not enough people to finish it. Can Haustek help?",
-    a6:"Yes — our production team fills in exactly what you are missing, from arrangement to master.",
+    a5:'Yes — DJ sets, live bands, performances with visuals. See <a href="/events">the nights we have built</a>.',
     ct_k:"Contact",
     ct_h:'<span class="ln">Got the track?</span> <span class="ln"><em>We have the stage.</em></span>',
-    r1t:"Send a demo",r1:"A private listening link and a few lines about you. No attachments needed.",
-    r2t:"Distribution &amp; label",r2:"You have the recording and need it on 200+ digital stores, with a team behind the promotion.",
-    r3t:"Booking &amp; events",r3:"A DJ set, a live show, or a whole night for your venue or brand.",
+    r1t:"Release music",r1:"Get your recording onto 200+ digital stores.",
+    r2t:"Booking &amp; events",r2:"A DJ set, a live show, or a whole night.",
+    r3t:"Brand partnerships",r3:"Music, events and content for brands.",
     r_go:"Write an email"
   }
 };
 
+let lang='vi';
+
+/* =====================================================================
+   TRƯỜNG SÓNG ÂM 3D + BEAT
+   Tâm sóng (chấm REC) đặt lệch phải để không đè lên tiêu đề; điện thoại
+   dời lên trên vì chữ nằm ở nửa dưới màn hình.
+   ===================================================================== */
+const hero=document.querySelector('.hero');
+const PHONE=matchMedia('(max-width:759px)').matches;
+const field=window.HKField&&HKField.mount(document.getElementById('field'),{
+  center:PHONE?[1,-28]:[10,-6],
+  eye:PHONE?[0,14,30]:[0,12,26],
+  target:PHONE?[0,-10,-14]:[0,-4,-18],
+  pointer:hero
+});
+if(field)hero.classList.add('gl-on');
+hero.addEventListener('hk-gl-lost',()=>hero.classList.remove('gl-on'));
+
+/* Beat 124 BPM tổng hợp bằng WebAudio — giữ nguyên tiếng kick và hi-hat
+   của bản trước. Không bao giờ tự phát: chỉ chạy khi người xem bấm. */
+let AC=null,playing=false,nextT=0,step=0,timer=null;
+const beatBtn=document.getElementById('beatBtn'),beatIco=document.getElementById('beatIco');
+const SPB=60/124/2;
+function kick(t){
+  const o=AC.createOscillator(),g=AC.createGain();
+  o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(45,t+.11);
+  g.gain.setValueAtTime(.9,t);g.gain.exponentialRampToValueAtTime(.001,t+.22);
+  o.connect(g).connect(AC.destination);o.start(t);o.stop(t+.25);
+}
+function hat(t,open){
+  const b=AC.createBuffer(1,AC.sampleRate*.06,AC.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2);
+  const s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain();
+  s.buffer=b;f.type="highpass";f.frequency.value=8000;g.gain.value=open?.28:.16;
+  s.connect(f).connect(g).connect(AC.destination);s.start(t);
+}
+function schedule(){
+  while(nextT<AC.currentTime+.12){
+    const inBar=step%8;
+    if(inBar%2===0){
+      kick(nextT);
+      const dt=(nextT-AC.currentTime)*1000;
+      setTimeout(()=>{if(playing&&field)field.kick();},Math.max(dt,0));   /* hình khớp tiếng */
+    }
+    hat(nextT,inBar===6);
+    nextT+=SPB;step++;
+  }
+  timer=setTimeout(schedule,30);
+}
+function paintBeat(){
+  const d=I18N[lang];
+  beatBtn.setAttribute('aria-pressed',playing);
+  beatBtn.setAttribute('aria-label',playing?d.beat_aria_off:d.beat_aria_on);
+  beatIco.setAttribute('d',playing?'M0 0h3.5v12H0zM6.5 0H10v12H6.5z':'M0 0l10 6L0 12z');
+  const lb=document.querySelector('[data-i18n="beat_on"]');if(lb)lb.textContent=playing?d.beat_off:d.beat_on;
+}
+beatBtn.addEventListener('click',()=>{
+  if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){return;}}
+  if(AC.state==="suspended")AC.resume();
+  playing=!playing;
+  if(field)field.beating=playing;
+  if(playing){nextT=AC.currentTime+.05;step=0;schedule();}
+  else clearTimeout(timer);
+  paintBeat();
+});
+/* rời tab thì tắt tiếng — không ai muốn beat chạy ngầm */
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing)beatBtn.click();});
+
+/* đổi ngôn ngữ — đặt sau phần beat vì nhãn nút beat cũng phải dịch */
 HK.lang(l=>{
-  const d=I18N[l];
+  lang=l;const d=I18N[l];
   document.querySelectorAll('[data-i18n]').forEach(el=>{const v=d[el.dataset.i18n];if(v!==undefined)el.innerHTML=v;});
   document.title=d._title;
   const md=document.querySelector('meta[name="description"]');
   if(md)md.setAttribute('content',d._desc);
+  paintBeat();
 });
+HK.count();
+HK.tilt('.pst .ph');
+
+/* =====================================================================
+   VÒNG XOAY NGHỆ SĨ 3D (CSS 3D, không WebGL)
+   12 ảnh xếp quanh một trụ tròn. Tự xoay chậm; kéo / vuốt ngang để xoay
+   tay, thả ra thì trôi theo đà. Ảnh quay ra trước thì hiện màu và tên,
+   ảnh ở mặt sau mờ đi. Kéo xong thì không tính là bấm vào link.
+   ===================================================================== */
+(function ring(){
+  const el=document.getElementById('ring');if(!el)return;
+  const stage=el.querySelector('.ring-stage'),items=[...el.querySelectorAll('.ring-item')];
+  const n=items.length,step=360/n;
+  el.classList.add('on');
+  let w,R;
+  function layout(){
+    w=Math.round(Math.min(250,Math.max(118,el.clientWidth*.16)));
+    R=Math.round(w/2/Math.tan(Math.PI/n)*1.3);
+    stage.style.setProperty('--w',w+'px');
+    items.forEach((it,i)=>it.style.transform=`rotateY(${i*step}deg) translateZ(${R}px)`);
+  }
+  layout();addEventListener('resize',layout);
+  let rot=0,vel=0,drag=false,lastX=0,moved=0,visible=false,raf=0,lastT=0;
+  const AUTO=HK.reduced?0:-7;   /* độ/giây */
+  function frame(t){
+    raf=0;if(!visible)return;
+    const dt=Math.min(.05,(t-(lastT||t))/1000);lastT=t;
+    if(!drag){vel*=.94;rot+=(Math.abs(vel)>.02?vel:AUTO*dt);}
+    stage.style.transform=`translateZ(${-R}px) rotateX(-13deg) rotateY(${rot}deg)`;   /* nhìn hơi từ trên xuống: thấy cả nửa vòng phía sau */
+    let best=-2,bi=0;
+    items.forEach((it,i)=>{
+      const c=Math.cos((i*step+rot)*Math.PI/180);
+      it.style.opacity=(.3+.7*Math.max(0,c)).toFixed(3);
+      if(c>best){best=c;bi=i;}
+    });
+    items.forEach((it,i)=>it.classList.toggle('front',i===bi));
+    if(!HK.reduced||drag||Math.abs(vel)>.02)raf=requestAnimationFrame(frame);
+  }
+  const go=()=>{if(!raf&&visible)raf=requestAnimationFrame(frame);};
+  new IntersectionObserver(es=>{visible=es[0].isIntersecting;lastT=0;go();},{threshold:0}).observe(el);
+  el.addEventListener('pointerdown',e=>{drag=true;moved=0;lastX=e.clientX;vel=0;el.classList.add('drag');el.setPointerCapture(e.pointerId);go();});
+  el.addEventListener('pointermove',e=>{
+    if(!drag)return;
+    const dx=e.clientX-lastX;lastX=e.clientX;moved+=Math.abs(dx);
+    const d=dx*.25;rot+=d;vel=d;
+  });
+  const end=()=>{drag=false;el.classList.remove('drag');go();};
+  el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
+  el.addEventListener('click',e=>{if(moved>6){e.preventDefault();e.stopPropagation();}},true);
+  /* bàn phím: Tab tới ảnh nào thì xoay ảnh đó ra trước */
+  items.forEach((it,i)=>it.addEventListener('focus',()=>{rot=-i*step;vel=0;go();}));
+})();
+
+/* =====================================================================
+   QUẢ CẦU CÁC CỬA HÀNG NHẠC SỐ
+   20 cái tên rải đều trên mặt cầu (xoắn Fibonacci), xoay chậm, kéo được.
+   Tên càng ở gần thì càng to, càng rõ; ở mặt sau thì nhỏ và mờ. Tâm cầu là
+   chấm REC — nhạc đi từ đây ra mọi nơi.
+   ===================================================================== */
+(function orb(){
+  const el=document.getElementById('orb');if(!el)return;
+  const items=[...el.querySelectorAll('li')],n=items.length;
+  el.classList.add('on');
+  const pts=items.map((_,i)=>{
+    const y=1-2*(i+.5)/n,r=Math.sqrt(1-y*y),th=i*Math.PI*(3-Math.sqrt(5));
+    return [Math.cos(th)*r,y,Math.sin(th)*r];
+  });
+  let ax=-.25,ay=0,vx=0,vy=0,drag=false,lx=0,ly=0,visible=false,raf=0,R=200;
+  function size(){R=Math.min(el.clientWidth,el.clientHeight)*.4;}
+  size();addEventListener('resize',size);
+  function frame(){
+    raf=0;if(!visible)return;
+    if(!drag){vy*=.95;vx*=.95;ay+=Math.abs(vy)>.0005?vy:(HK.reduced?0:.0035);ax+=vx;}
+    ax=Math.max(-1,Math.min(1,ax));
+    const cy=Math.cos(ay),sy=Math.sin(ay),cx=Math.cos(ax),sx=Math.sin(ax);
+    pts.forEach((p,i)=>{
+      let x=p[0]*cy-p[2]*sy,z=p[0]*sy+p[2]*cy,y=p[1];
+      const y2=y*cx-z*sx,z2=y*sx+z*cx;
+      const s=(2.2+z2)/2.6;                       /* gần thì to */
+      const it=items[i];
+      it.style.transform=`translate(-50%,-50%) translate3d(${(x*R).toFixed(1)}px,${(y2*R).toFixed(1)}px,0) scale(${s.toFixed(3)})`;
+      it.style.opacity=(.15+.85*((z2+1)/2)).toFixed(3);
+      it.style.zIndex=Math.round((z2+1)*50);
+    });
+    if(!HK.reduced||drag||Math.abs(vy)>.0005)raf=requestAnimationFrame(frame);
+  }
+  const go=()=>{if(!raf&&visible)raf=requestAnimationFrame(frame);};
+  new IntersectionObserver(es=>{visible=es[0].isIntersecting;go();},{threshold:0}).observe(el);
+  el.addEventListener('pointerdown',e=>{drag=true;lx=e.clientX;ly=e.clientY;vx=vy=0;el.classList.add('drag');el.setPointerCapture(e.pointerId);go();});
+  el.addEventListener('pointermove',e=>{
+    if(!drag)return;
+    vy=(e.clientX-lx)*.006;vx=-(e.clientY-ly)*.006;ay+=vy;ax+=vx;lx=e.clientX;ly=e.clientY;
+  });
+  const end=()=>{drag=false;el.classList.remove('drag');go();};
+  el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
+})();
 </script>
 </body>
 </html>

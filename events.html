@@ -43,17 +43,16 @@
 @media(min-width:760px){.hl-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:44px 20px}}
 @media(min-width:1100px){.hl-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .hl{display:block;min-width:0;position:relative}   /* nhãn SOLD OUT bám vào thẻ này */
-.hl-shot{position:relative;display:block;aspect-ratio:4/5;overflow:hidden;border-radius:4px;background:var(--ink-3)}
+.hl-shot{position:relative;display:block;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:var(--ink-3);will-change:transform}
 .hl-shot img{width:100%;height:100%;object-fit:cover}
 .hl:hover .hl-shot img{transform:scale(1.03)}
 .hl-badge{position:absolute;top:12px;left:12px;z-index:2;background:var(--red);color:var(--paper);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;padding:5px 9px;border-radius:3px}
 .hl-body{display:block;padding-top:14px}
 .hl-name{display:block;font-family:var(--disp);font-weight:800;font-size:clamp(18px,1.6vw,22px);letter-spacing:-.02em;line-height:1.2}
-.hl-note{display:block;margin-top:6px;color:var(--concrete);font-size:14px;line-height:1.5;text-wrap:pretty}
+/* bớt chữ: ghi chú dài và dòng nguồn giấu khỏi mắt nhưng vẫn để trình đọc màn hình đọc (cả thẻ đã là link tới nguồn) */
+.hl-note,.hl-src{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .hl-meta{display:block;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--concrete)}
 .hl-body br{display:none}
-.hl-src{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);border-bottom:1px solid var(--line-2);transition:border-color .2s}
-.hl:hover .hl-src{border-color:var(--red)}
 .arch-note{margin-top:28px;color:var(--concrete);font-size:15px;max-width:80ch}
 .arch-note a{color:var(--paper);border-bottom:1px solid var(--line-2)}
 .arch-note a:hover{border-color:var(--red)}
@@ -223,6 +222,7 @@
 <main id="main">
 
 <section class="page-hero">
+  <canvas class="field" aria-hidden="true"></canvas>
   <svg class="ripple page-ripple" viewBox="0 0 1000 1000" aria-hidden="true">
     <circle cx="500" cy="500" r="80" stroke-opacity=".2"/>
     <circle cx="500" cy="500" r="160" stroke-opacity=".15"/>
@@ -237,7 +237,7 @@
   <div class="wrap" style="position:relative;z-index:1">
     <p class="label" data-i18n="kicker">Sự kiện · từ 2017</p>
     <h1 data-i18n="h1"><span class="ln">Những đêm Haustek</span> <span class="ln"><em>đứng sau ánh đèn sân khấu.</em></span></h1>
-    <p class="lead" data-i18n="lead">Từ những đêm techno nhỏ ở Sài Gòn cho tới chuỗi livestream trải khắp châu Á — đây là những sân khấu chúng tôi đã dựng, đã chơi và đã lên sóng. Bấm vào một tiết mục để xem lại.</p>
+    <p class="lead" data-i18n="lead">Từ club night ở Sài Gòn tới chuỗi livestream khắp châu Á. Bấm vào một tiết mục để xem lại.</p>
   </div>
 </section>
 
@@ -545,13 +545,14 @@
       </div>
     </div>
     <div class="foot-bar">
-      <span>© 2026 Haustek · California → Việt Nam · Since 2017</span>
+      <span>© 2026 Haustek · Việt Nam · Since 2017</span>
       <a href="mailto:mgmt@haustek-group.com">mgmt@haustek-group.com</a>
     </div>
   </div>
   <div class="foot-mark" aria-hidden="true"><img src="/assets/wordmark.svg" alt="" width="1000" height="158" loading="lazy"></div>
 </footer>
 
+<script src="/assets/field.js"></script>
 <script src="/assets/site.js"></script>
 <script>
 /* =====================================================================
@@ -659,7 +660,7 @@ const I18N={
     skip:"Bỏ qua điều hướng, tới nội dung chính",
     back:"← Về trang chủ", kicker:"Sự kiện · từ 2017",
     h1:'<span class="ln">Những đêm Haustek</span> <span class="ln"><em>đứng sau ánh đèn sân khấu.</em></span>',
-    lead:"Từ những đêm techno nhỏ ở Sài Gòn đến các chuỗi livestream khắp châu Á, Haustek luôn có mặt phía sau — dựng sân khấu, chạy chương trình, đưa buổi diễn lên sóng. Bấm vào một tiết mục để xem lại.",
+    lead:"Từ club night ở Sài Gòn tới chuỗi livestream khắp châu Á. Bấm vào một tiết mục để xem lại.",
     cta:'Muốn Haustek dựng một đêm cho bạn? <a href="mailto:mgmt@haustek-group.com">Gửi yêu cầu booking →</a>',
     watch:"Xem lại", soon:"Video sắp có", loading:"Đang tải video…",
     blocked:"Video này hiện không thể phát tại đây do vướng bản quyền âm nhạc. Bạn xem trực tiếp trên YouTube nhé.",
@@ -718,7 +719,7 @@ const I18N={
     /* ---------- dành cho venue ---------- */
     vn_k:"Dành cho venue & nhãn hàng",
     vn_h:'<span class="ln">Bạn có không gian.</span> <span class="ln"><em>Haustek có những sự kiện đáng nhớ.</em></span>',
-    vn_p:"Nếu bạn đang vận hành một club, rooftop, không gian sự kiện, hay là thương hiệu muốn làm sự kiện quảng bá — đây là những gì Haustek mang tới, và tất cả đều kiểm chứng được qua hình ảnh công khai.",
+    vn_p:"Club, rooftop, không gian sự kiện hay nhãn hàng — Haustek dựng trọn một đêm.",
     vn_d1t:"Lineup & booking",
     vn_d1:"Nghệ sĩ trong nước lẫn quốc tế, chọn đúng gu khách của không gian bạn.",
     vn_d2t:"Kỹ thuật sân khấu",
@@ -734,7 +735,7 @@ const I18N={
     skip:"Skip navigation, go to main content",
     back:"← Back to home", kicker:"Events · since 2017",
     h1:'<span class="ln">The nights Haustek</span> <span class="ln"><em>stood behind the stage lights.</em></span>',
-    lead:"From small techno nights in Saigon to livestream series across Asia, Haustek has always been the one behind it — building the stage, running the show, putting it on air. Tap a card to watch.",
+    lead:"From club nights in Saigon to livestreams across Asia. Tap a card to watch.",
     cta:'Want Haustek to build a night for you? <a href="mailto:mgmt@haustek-group.com">Request a booking →</a>',
     watch:"Watch", soon:"Video coming soon", loading:"Loading video…",
     blocked:"This video can't be played here right now due to a music licensing claim. You can watch it directly on YouTube instead.",
@@ -793,7 +794,7 @@ const I18N={
     /* ---------- for venues ---------- */
     vn_k:"For venues & brands",
     vn_h:'<span class="ln">You have the room.</span> <span class="ln"><em>Haustek has the nights people remember.</em></span>',
-    vn_p:"If you run a club, a rooftop, an event space, or you're a brand planning a promotional event — here is what Haustek brings, and all of it can be checked against what's already public.",
+    vn_p:"Club, rooftop, event space or brand — Haustek builds the whole night.",
     vn_d1t:"Lineup & booking",
     vn_d1:"Local and international artists, matched to the crowd your room actually draws.",
     vn_d2t:"Stage technical",
@@ -1370,6 +1371,8 @@ const ARCHIVE=[
   render();
   window.__archRender=render;
 })();
+/* nghiêng poster theo chuột, như trang chủ */
+HK.tilt('.hl-shot');
 </script>
 </body>
 </html>

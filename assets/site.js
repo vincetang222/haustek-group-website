@@ -92,5 +92,53 @@
   }
   reveal();
 
-  window.HK={lang:bindLang,current:()=>lang,reveal:reveal,loadLang:loadLang,saveLang:saveLang};
+  const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- số chạy lên khi cuộn tới ----------
+     <dd data-count="114" data-suffix="M+">114M+</dd> — chữ gốc nằm sẵn trong
+     HTML (máy tắt JS vẫn đọc được), JS chỉ chạy lại từ 0 lúc nó hiện ra. */
+  function count(root){
+    if(REDUCED||!('IntersectionObserver' in window))return;
+    const els=(root||document).querySelectorAll('[data-count]');
+    const o=new IntersectionObserver(es=>es.forEach(e=>{
+      if(!e.isIntersecting)return;o.unobserve(e.target);
+      const el=e.target,to=+el.dataset.count,suf=el.dataset.suffix||'',t0=performance.now(),dur=1300;
+      const fmt=v=>v>=1000?v.toLocaleString(lang==='vi'?'vi-VN':'en-US'):String(v);
+      (function tick(t){const p=Math.min(1,(t-t0)/dur);el.textContent=fmt(Math.round(to*(1-Math.pow(1-p,3))))+suf;if(p<1)requestAnimationFrame(tick);})(t0);
+    }),{threshold:.5});
+    els.forEach(el=>o.observe(el));
+  }
+
+  /* ---------- nghiêng 3D theo chuột ----------
+     Chỉ cho chuột thật: trên màn cảm ứng không có "rê", nghiêng theo ngón
+     tay khi đang cuộn chỉ gây chóng mặt. */
+  function tilt(sel,max){
+    if(REDUCED||!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+    max=max||9;
+    document.querySelectorAll(sel).forEach(el=>{
+      el.style.transition='transform .5s var(--ease)';
+      el.addEventListener('pointermove',e=>{
+        const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+        el.style.transition='transform .08s linear';
+        el.style.transform=`perspective(900px) rotateX(${(-y*max).toFixed(2)}deg) rotateY(${(x*max).toFixed(2)}deg) scale(1.02)`;
+      });
+      el.addEventListener('pointerleave',()=>{el.style.transition='transform .5s var(--ease)';el.style.transform='';});
+    });
+  }
+
+  /* ---------- trường sóng 3D ở đầu trang con ----------
+     Trang nào có <canvas class="field"> trong .page-hero và đã nạp
+     assets/field.js (trước file này) thì tự bật; không vẽ được thì
+     hoạ tiết SVG tĩnh vẫn ở đó. */
+  (function(){
+    const ph=document.querySelector('.page-hero'),cv=ph&&ph.querySelector('.field');
+    if(!cv||!window.HKField)return;
+    const phone=matchMedia('(max-width:759px)').matches;
+    const f=HKField.mount(cv,{lite:true,pointer:ph,
+      center:phone?[3,-26]:[15,-9],eye:phone?[0,14,30]:[0,12,26],target:phone?[0,-10,-14]:[0,-4,-18]});
+    if(f)ph.classList.add('gl-on');
+    ph.addEventListener('hk-gl-lost',()=>ph.classList.remove('gl-on'));
+  })();
+
+  window.HK={lang:bindLang,current:()=>lang,reveal:reveal,loadLang:loadLang,saveLang:saveLang,count:count,tilt:tilt,reduced:REDUCED};
 })();

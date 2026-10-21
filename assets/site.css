@@ -153,6 +153,14 @@ body.menu-open{overflow:hidden}
 /* Trang con: phần đầu trang */
 .page-hero{padding-top:calc(var(--nav-h) + clamp(56px,9vw,120px));padding-bottom:clamp(48px,7vw,88px);position:relative;overflow:hidden}
 .page-hero h1{font-size:clamp(40px,6.6vw,100px);max-width:15ch;margin:24px 0 26px}
+/* trường sóng 3D ở đầu trang con (assets/field.js). Vẽ được thì giấu
+   hoạ tiết SVG tĩnh; lớp tối bên trái và phía dưới giữ chữ dễ đọc. */
+.page-hero .field{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block;opacity:0;transition:opacity 1.2s var(--ease)}
+.page-hero.gl-on .field{opacity:.6}   /* trang con: nền chìm hơn trang chủ, chữ là chính */
+.page-hero.gl-on .page-ripple{display:none}
+.page-hero.gl-on::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(10,10,13,.8),rgba(10,10,13,.3) 50%,transparent 75%),linear-gradient(to top,var(--ink),transparent 40%)}
+@media(max-width:759px){.page-hero.gl-on::before{background:linear-gradient(to top,var(--ink) 25%,rgba(10,10,13,.55) 70%,rgba(10,10,13,.2))}}
 
 /* Họa tiết sóng loang — vòng tròn đồng tâm, nét mảnh (MOTIF-01) */
 .ripple .core{fill:var(--red);stroke:none}

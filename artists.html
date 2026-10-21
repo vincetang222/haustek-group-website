@@ -145,6 +145,7 @@ a.track:hover{color:var(--red)}
 <main id="main">
 
 <section class="page-hero">
+  <canvas class="field" aria-hidden="true"></canvas>
   <svg class="ripple page-ripple" viewBox="0 0 1000 1000" aria-hidden="true">
     <circle cx="500" cy="500" r="80" stroke-opacity=".2"/>
     <circle cx="500" cy="500" r="160" stroke-opacity=".15"/>
@@ -158,8 +159,8 @@ a.track:hover{color:var(--red)}
   </svg>
   <div class="wrap" style="position:relative;z-index:1">
     <p class="label" data-i18n="kicker">Nghệ sĩ · từ 2017</p>
-    <h1 data-i18n="h1"><span class="ln">Những người</span> <span class="ln">đã <em>cùng làm nhạc.</em></span></h1>
-    <p class="lead" data-i18n="lead">Producer, DJ, VJ, songwriter, vocalist — người Việt trong nước và ngoài nước. Đây là những cái tên đã đi qua phòng thu, sàn diễn và các bản phát hành của Haustek.</p>
+    <h1 data-i18n="h1"><span class="ln">Những nghệ sĩ đã từng</span> <span class="ln"><em>phát hành nhạc tại Haustek.</em></span></h1>
+    <p class="lead" data-i18n="lead">Producer, DJ, rapper, vocalist — trong nước và hải ngoại. Bấm vào ảnh để nghe thử.</p>
     <p class="meta-row" id="metaRow"></p>
   </div>
 </section>
@@ -185,12 +186,12 @@ a.track:hover{color:var(--red)}
 <div class="wrap">
   <div class="tail">
     <div>
-      <p class="label" data-i18n="tail_k">Gửi demo</p>
+      <p class="label" data-i18n="tail_k">Hợp tác</p>
       <h2 style="margin-top:22px" data-i18n="tail_h"><span class="ln">Cái tên tiếp theo</span> <span class="ln"><em>có thể là bạn.</em></span></h2>
     </div>
     <div>
-      <p data-i18n="tail">Cùng nhiều producer, songwriter, DJ, VJ và vocalist khác chưa kể hết ở đây. Gửi link nghe riêng tư và vài dòng về bạn — demo nào gửi tới, chúng tôi cũng nghe.</p>
-      <a class="btn btn-red" style="margin-top:24px" href="mailto:mgmt@haustek-group.com?subject=%5BDEMO%5D%20"><span data-i18n="cta">Gửi demo cho Haustek</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <p data-i18n="tail">Phát hành, label, sự kiện, sản xuất — một đầu mối.</p>
+      <a class="btn btn-red" style="margin-top:24px" href="/#contact"><span data-i18n="cta">Phát hành cùng Haustek</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   </div>
 </div>
@@ -228,13 +229,14 @@ a.track:hover{color:var(--red)}
       </div>
     </div>
     <div class="foot-bar">
-      <span>© 2026 Haustek · California → Việt Nam · Since 2017</span>
+      <span>© 2026 Haustek · Việt Nam · Since 2017</span>
       <a href="mailto:mgmt@haustek-group.com">mgmt@haustek-group.com</a>
     </div>
   </div>
   <div class="foot-mark" aria-hidden="true"><img src="/assets/wordmark.svg" alt="" width="1000" height="158" loading="lazy"></div>
 </footer>
 
+<script src="/assets/field.js"></script>
 <script src="/assets/site.js"></script>
 <script>
 /* =====================================================================
@@ -304,13 +306,13 @@ const I18N={
   vi:{
     _title:"Nghệ sĩ hợp tác — Haustek",
     kicker:"Nghệ sĩ · từ 2017",
-    h1:'<span class="ln">Những người</span> <span class="ln">đã <em>cùng làm nhạc.</em></span>',
-    lead:"Producer, DJ, VJ, songwriter, vocalist — người Việt trong nước và ngoài nước. Đây là những cái tên đã đi qua phòng thu, sàn diễn và các bản phát hành của Haustek.",
+    h1:'<span class="ln">Những nghệ sĩ đã từng</span> <span class="ln"><em>phát hành nhạc tại Haustek.</em></span>',
+    lead:"Producer, DJ, rapper, vocalist — trong nước và hải ngoại. Bấm vào ảnh để nghe thử.",
     meta:"<span><b>%n</b> nghệ sĩ</span><span><b>%s</b> lượt nghe trên Spotify</span>",
-    tail_k:"Gửi demo",
+    tail_k:"Hợp tác",
     tail_h:'<span class="ln">Cái tên tiếp theo</span> <span class="ln"><em>có thể là bạn.</em></span>',
-    tail:"Cùng nhiều producer, songwriter, DJ, VJ và vocalist khác chưa kể hết ở đây. Gửi link nghe riêng tư và vài dòng về bạn — demo nào gửi tới, chúng tôi cũng nghe.",
-    cta:"Gửi demo cho Haustek",
+    tail:"Phát hành, label, sự kiện, sản xuất — một đầu mối.",
+    cta:"Phát hành cùng Haustek",
     all:"Tất cả", producer:"Producer", dj:"DJ", vocalist:"Vocalist",
     band:"Ban nhạc", songwriter:"Songwriter", vj:"VJ",
     streams:"Lượt nghe Spotify", updating:"Đang cập nhật", track_lbl:"Bài tiêu biểu",
@@ -321,13 +323,13 @@ const I18N={
   en:{
     _title:"Collaborating artists — Haustek",
     kicker:"Artists · since 2017",
-    h1:'<span class="ln">The people</span> <span class="ln">we have <em>made music with.</em></span>',
-    lead:"Producers, DJs, VJs, songwriters, vocalists — Vietnamese, at home and abroad. These are the names that have passed through Haustek's studio, stages and releases.",
+    h1:'<span class="ln">Artists who have</span> <span class="ln"><em>released music with Haustek.</em></span>',
+    lead:"Producers, DJs, rappers, vocalists — at home and abroad. Tap a photo to listen.",
     meta:"<span><b>%n</b> artists</span><span><b>%s</b> streams on Spotify</span>",
-    tail_k:"Send a demo",
+    tail_k:"Work with us",
     tail_h:'<span class="ln">The next name</span> <span class="ln"><em>could be yours.</em></span>',
-    tail:"Along with many more producers, songwriters, DJs, VJs and vocalists not listed here. Send a private listening link and a few lines about you — every demo sent gets heard.",
-    cta:"Send Haustek a demo",
+    tail:"Distribution, label, events, production — one place.",
+    cta:"Release with Haustek",
     all:"All", producer:"Producer", dj:"DJ", vocalist:"Vocalist",
     band:"Band", songwriter:"Songwriter", vj:"VJ",
     streams:"Spotify streams", updating:"Coming soon", track_lbl:"Signature track",
