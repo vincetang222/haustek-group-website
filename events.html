@@ -105,8 +105,6 @@
   -webkit-mask:radial-gradient(ellipse,#000 40%,transparent 72%);mask:radial-gradient(ellipse,#000 40%,transparent 72%)}
 .yb .tw{display:block;padding:0;border:0;background:none;cursor:pointer}
 .yb .tw.x{--c1:rgba(255,46,76,.9);--c2:rgba(255,46,76,.35);--cap:var(--red);cursor:pointer}
-.yb .tw.unk{--c1:rgba(240,240,242,.08);--c2:transparent;--cap:rgba(240,240,242,.22)}   /* "Chưa rõ": mờ, nét đứt */
-.yb .tw.unk .t{outline:1px dashed rgba(240,240,242,.4);outline-offset:-1px}
 .yb .tw.sel:not(.x){--c1:rgba(240,240,242,.5);--c2:rgba(240,240,242,.1);--cap:var(--paper)}
 .yb .tw:focus-visible{outline:none}
 .yb .tw:focus-visible .t{background:var(--red)}
@@ -1275,14 +1273,14 @@ const ARCHIVE=[
    Hà Nội, Arcan = Bình Thạnh), Haustek xác nhận (Kumquat Tree, Kobala,
    Lush), hoặc trang club trên RA ghi địa chỉ (Dong Bar: 3 Phạm Ngũ Lão,
    Huế; TẾT Club: 2 Tạ Hiện, Hà Nội). Địa điểm chưa có trong bảng thì đêm
-   đó vào cột "Chưa rõ" — thêm một dòng vào VENUE_CITY là cột tự đổi theo. */
+   đó không vào cột hay nút lọc nào, chỉ hiện trong danh sách "Tất cả" —
+   thêm một dòng vào VENUE_CITY là đêm đó tự vào đúng cột. */
 const CITY={
   hcm:{vi:"TP.HCM",en:"Ho Chi Minh City"},
   hn:{vi:"Hà Nội",en:"Hanoi"},
   dn:{vi:"Đà Nẵng",en:"Da Nang"},
   hue:{vi:"Huế",en:"Hue"},
-  online:{vi:"Online",en:"Online"},
-  unk:{vi:"Chưa rõ",en:"Unconfirmed"}
+  online:{vi:"Online",en:"Online"}
 };
 const VENUE_CITY={
   "Vibes Club Saigon":"hcm","Aura Lounge":"hcm","The Hub Saigon":"hcm","Khu 13":"hcm",
@@ -1308,10 +1306,11 @@ const EVENT_CITY={
   "998396":"hcm"       /* Haustek x Hrbr-Habour: Saigon Friday */
 };
 const cityOf=e=>EVENT_CITY[e.i]||VENUE_CITY[e.v]||'unk';
-/* các thành phố có đêm diễn, nhiều đêm nhất đứng trước; "Chưa rõ" luôn cuối */
+/* các thành phố có đêm diễn, nhiều đêm nhất đứng trước; đêm chưa rõ
+   thành phố không thành cột riêng */
 const CITY_ORDER=(()=>{
-  const n={};ARCHIVE.forEach(e=>{const c=cityOf(e);n[c]=(n[c]||0)+1;});
-  return Object.keys(n).sort((a,b)=>(a==='unk')-(b==='unk')||n[b]-n[a]);
+  const n={};ARCHIVE.forEach(e=>{const c=cityOf(e);if(c!=='unk')n[c]=(n[c]||0)+1;});
+  return Object.keys(n).sort((a,b)=>n[b]-n[a]);
 })();
 
 (function(){
@@ -1379,7 +1378,7 @@ const CITY_ORDER=(()=>{
   });
   const max=Math.max(...data.map(d=>d.n));
   floor.insertAdjacentHTML('beforeend',data.map((d,i)=>
-    `<button class="tw${d.c==='unk'?' unk':''}" type="button" data-c="${d.c}"><i class="t"></i><i class="f"></i><i class="b"></i><i class="l"></i><i class="r"></i></button>`+
+    `<button class="tw" type="button" data-c="${d.c}"><i class="t"></i><i class="f"></i><i class="b"></i><i class="l"></i><i class="r"></i></button>`+
     (d.x?`<span class="tw x" data-i="${i}" aria-hidden="true"><i class="t"></i><i class="f"></i><i class="b"></i><i class="l"></i><i class="r"></i></span>`:'')).join(''));
   lblFloor.innerHTML=data.map(d=>`<span class="lb"><span><small></small><b>${d.n}</b></span></span>`).join('');
   const bars=[...floor.querySelectorAll('button.tw')],tops=[...floor.querySelectorAll('.tw.x')],labels=[...lblFloor.querySelectorAll('.lb')];
