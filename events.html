@@ -1271,24 +1271,28 @@ const ARCHIVE=[
 /* ===================== ĐÊM DIỄN Ở TỈNH / THÀNH NÀO =====================
    Hồ sơ Resident Advisor chỉ ghi tên địa điểm, nên thành phố suy ra từ hai
    bảng dưới. CHỈ ghi những gì chắc chắn: tên địa điểm hoặc tên đêm có nói
-   rõ thành phố, hoặc chỗ khác trên trang đã ghi (Aura = Sài Gòn, Savage =
-   Hà Nội, Arcan = Bình Thạnh). Địa điểm chưa có trong bảng thì đêm đó vào
-   cột "Chưa rõ" — thêm một dòng vào VENUE_CITY là cột tự đổi theo. */
+   rõ thành phố, chỗ khác trên trang đã ghi (Aura = Sài Gòn, Savage =
+   Hà Nội, Arcan = Bình Thạnh), Haustek xác nhận (Kumquat Tree, Kobala,
+   Lush), hoặc trang club trên RA ghi địa chỉ (Dong Bar: 3 Phạm Ngũ Lão,
+   Huế; TẾT Club: 2 Tạ Hiện, Hà Nội). Địa điểm chưa có trong bảng thì đêm
+   đó vào cột "Chưa rõ" — thêm một dòng vào VENUE_CITY là cột tự đổi theo. */
 const CITY={
   hcm:{vi:"TP.HCM",en:"Ho Chi Minh City"},
   hn:{vi:"Hà Nội",en:"Hanoi"},
   dn:{vi:"Đà Nẵng",en:"Da Nang"},
+  hue:{vi:"Huế",en:"Hue"},
   online:{vi:"Online",en:"Online"},
   unk:{vi:"Chưa rõ",en:"Unconfirmed"}
 };
 const VENUE_CITY={
   "Vibes Club Saigon":"hcm","Aura Lounge":"hcm","The Hub Saigon":"hcm","Khu 13":"hcm",
   "TBA - Saigon":"hcm","TBA - Boujee.SGN":"hcm","Schiller Saigon":"hcm","Playhouse Saigon":"hcm",
-  "Air Saigon":"hcm","1960 Bar Saigon":"hcm","Arcan, Bình Thạnh":"hcm",
+  "Air Saigon":"hcm","1960 Bar Saigon":"hcm","Arcan, Bình Thạnh":"hcm","Lush":"hcm",
   "Savage":"hn","Camelia Lounge Hanoi":"hn","Hanoi Rock City":"hn","T-Studio - The Toilet Hanoi":"hn","TBA - Hanoi":"hn",
-  "Kumquat Tree":"hn","Kobala":"hn",
+  "Kumquat Tree":"hn","Kobala":"hn","TẾT Club":"hn",
   "Tê Bar Da Nang":"dn",
-  "Barbetta Hoi An":"dn"   /* Hội An thuộc Đà Nẵng từ khi sáp nhập tỉnh 07/2025 */
+  "Barbetta Hoi An":"dn",  /* Hội An thuộc Đà Nẵng từ khi sáp nhập tỉnh 07/2025 */
+  "Dong Bar - Unlock the Vibes":"hue"
 };
 /* Đêm không ghi địa điểm (hoặc ghi chung chung) nhưng tên đêm nói rõ nơi
    diễn ra — theo mã sự kiện RA (i). */
