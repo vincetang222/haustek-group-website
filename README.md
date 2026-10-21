@@ -22,4 +22,4 @@ Hướng dẫn đầy đủ: [`docs/README-trien-khai.md`](docs/README-trien-kha
 
 ## Đưa lên mạng
 
-Vercel, dự án loại **Other**: không có lệnh build, thư mục xuất là gốc repo. Mỗi lần đẩy lên `main` là Vercel tự dựng lại.
+Vercel, dự án `haustek-website` (vincetang222s-projects), gắn tên miền **haustek-group.com**. Loại **Other**: không có lệnh build, thư mục xuất là gốc repo. Mỗi lần đẩy lên `main` là Vercel tự dựng lại bản production; nhánh khác thì ra bản xem trước.
