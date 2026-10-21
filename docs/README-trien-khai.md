@@ -2,6 +2,8 @@
 
 Cập nhật: 29.07.2026 · Website: **haustek-group.com** · Liên hệ: **mgmt@haustek-group.com**
 
+Repo này (`haustek-group-website`) chỉ chứa website công khai. CRM, portal và file SQL Supabase nằm ở repo `vincetang222/haustek` (tách ra từ 10.2026).
+
 ---
 
 ## 1. Toàn bộ file và vai trò của từng file
@@ -44,7 +46,7 @@ Cập nhật: 29.07.2026 · Website: **haustek-group.com** · Liên hệ: **mgmt
 | File | Dùng ở đâu |
 |---|---|
 | `google-apps-script.js` | **Tạm không dùng** — viết cho trang khai báo metadata, trang này đã gỡ khỏi website (10.2026). Giữ lại phòng khi bật lại |
-| `supabase-schema.sql` | Dán vào Supabase SQL Editor để dựng cơ sở dữ liệu doanh thu |
+| `supabase-schema.sql` | **Nằm ở repo `vincetang222/haustek`**, không ở đây — dán vào Supabase SQL Editor để dựng cơ sở dữ liệu doanh thu |
 | `haustek-brand-playbook.html` | Tài liệu nội bộ về nhận diện thương hiệu. Mở bằng trình duyệt, in ra PDF được |
 
 ---
@@ -125,6 +127,8 @@ Sau đó mỗi hồ sơ nghệ sĩ gửi sẽ tự động vào 3 tab: `Releases
 ---
 
 ## 4. Dựng cơ sở dữ liệu doanh thu
+
+File `supabase-schema.sql` nằm ở repo `vincetang222/haustek` (thư mục `docs/`).
 
 1. Tạo project trên `supabase.com`
 2. Vào SQL Editor → New query → dán toàn bộ `supabase-schema.sql` → Run
