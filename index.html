@@ -300,9 +300,10 @@
   </div>
 </section>
 
-<!-- 01 · KẾT QUẢ — case thật, số liệu lấy từ bảng ARTISTS (artists.html)
-     và ARCHIVE (events.html); mỗi thẻ dẫn thẳng tới nguồn để khách tự kiểm
-     chứng. Đổi số ở hai bảng đó thì nhớ sửa luôn ở đây và trong I18N. -->
+<!-- 01 · KẾT QUẢ — case thật, mỗi thẻ dẫn thẳng tới nguồn để khách tự kiểm
+     chứng. Ba thẻ phát hành (data-artist) lấy tên bài và lượt nghe từ
+     /assets/artists-data.js lúc tải trang — số trong HTML chỉ là bản dự
+     phòng khi máy tắt JS. Ba thẻ sự kiện lấy từ bảng ARCHIVE (events.html). -->
 <section class="sec" id="results">
   <div class="wrap">
     <div class="head">
@@ -313,25 +314,25 @@
       <a class="more rv" href="/events"><span data-i18n="rs_all">Xem tất cả sự kiện</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
     <div class="cases">
-      <a class="case rv" href="https://open.spotify.com/track/0oXjDcT4qKLBLYY9lPRrHT" target="_blank" rel="noopener">
-        <span class="cv"><span class="cv-img"><img class="duo" src="/artists/lope-dope.webp" alt="Lope Dope" width="800" height="800" loading="lazy" decoding="async"></span><span class="cv-tag" data-i18n="tg_rel">Phát hành</span><span class="cv-num"><b data-i18n="c1n">2,9 triệu</b><small data-i18n="c1u">lượt nghe Spotify</small></span></span>
-        <h3>Lope Dope</h3><span class="cs-meta"><span data-i18n="c1m">Đêm Thành Phố</span> ↗</span>
+      <a class="case rv" data-artist="Lope Dope" href="https://open.spotify.com/track/0oXjDcT4qKLBLYY9lPRrHT" target="_blank" rel="noopener">
+        <span class="cv"><span class="cv-img"><img class="duo" src="/artists/lope-dope.webp" alt="Lope Dope" width="800" height="800" loading="lazy" decoding="async"></span><span class="cv-tag" data-i18n="tg_rel">Phát hành</span><span class="cv-num"><b data-num>2,9 triệu</b><small data-i18n="c1u">lượt nghe Spotify</small></span></span>
+        <h3>Lope Dope</h3><span class="cs-meta"><span data-track>Đêm Thành Phố</span> ↗</span>
       </a>
       <a class="case rv" href="https://mixmag.asia/read/huyn-thoi-nhc-trance-cosmic-gate-ln-u-tien-chi-nhc-ti-sai-gon-trong-tour-din-asia-qung-ba-album-mi-mosaiik-2-vit-nam" target="_blank" rel="noopener">
         <span class="cv"><span class="cv-img"><img class="duo" src="/events/cosmic-gate.webp" alt="Cosmic Gate tại Boujee Station, Sài Gòn" width="720" height="900" loading="lazy" decoding="async"></span><span class="cv-tag ev" data-i18n="tg_ev">Sự kiện</span><span class="cv-num"><b data-i18n="c2n">Cháy vé</b><small data-i18n="c2u">Lần đầu tới Sài Gòn</small></span></span>
         <h3>Cosmic Gate</h3><span class="cs-meta"><span data-i18n="c2m">Boujee.SGN · 2023</span> ↗</span>
       </a>
-      <a class="case rv" href="https://open.spotify.com/track/36HDVYZL4whJgqHte9NHBx" target="_blank" rel="noopener">
-        <span class="cv"><span class="cv-img"><img class="duo" src="/artists/huongmybong.webp" alt="HƯƠNGMYBÔNG" width="800" height="800" loading="lazy" decoding="async"></span><span class="cv-tag" data-i18n="tg_rel">Phát hành</span><span class="cv-num"><b data-i18n="c3n">1,2 triệu</b><small data-i18n="c3u">lượt nghe Spotify</small></span></span>
-        <h3>HƯƠNGMYBÔNG</h3><span class="cs-meta"><span data-i18n="c3m">Say Một Đời Vì Em</span> ↗</span>
+      <a class="case rv" data-artist="HƯƠNGMYBÔNG" href="https://open.spotify.com/track/36HDVYZL4whJgqHte9NHBx" target="_blank" rel="noopener">
+        <span class="cv"><span class="cv-img"><img class="duo" src="/artists/huongmybong.webp" alt="HƯƠNGMYBÔNG" width="800" height="800" loading="lazy" decoding="async"></span><span class="cv-tag" data-i18n="tg_rel">Phát hành</span><span class="cv-num"><b data-num>1,2 triệu</b><small data-i18n="c3u">lượt nghe Spotify</small></span></span>
+        <h3>HƯƠNGMYBÔNG</h3><span class="cs-meta"><span data-track>Say Một Đời Vì Em</span> ↗</span>
       </a>
       <a class="case rv" href="https://ra.co/events/1309879" target="_blank" rel="noopener">
         <span class="cv"><span class="cv-img"><img class="duo" src="/events/boiler-room.webp" alt="Boiler Room Hồ Chí Minh" width="720" height="900" loading="lazy" decoding="async"></span><span class="cv-tag ev" data-i18n="tg_ev">Sự kiện</span><span class="cv-num"><b data-i18n="c4n">18 nghệ sĩ</b><small data-i18n="c4u">2 ngày ở Khu 13</small></span></span>
         <h3>Boiler Room</h3><span class="cs-meta"><span data-i18n="c4m">Sài Gòn · 2019</span> ↗</span>
       </a>
-      <a class="case rv" href="https://open.spotify.com/track/24ZX4PNB6BbOWQdAJUW413" target="_blank" rel="noopener">
-        <span class="cv"><span class="cv-img"><img class="duo" src="/artists/tro-music.webp" alt="TRO-Music" width="800" height="800" loading="lazy" decoding="async"></span><span class="cv-tag" data-i18n="tg_rel">Phát hành</span><span class="cv-num"><b data-i18n="c5n">726 nghìn</b><small data-i18n="c5u">lượt nghe Spotify</small></span></span>
-        <h3>TRO-Music</h3><span class="cs-meta"><span data-i18n="c5m">Đà Lạt Còn Mưa Không Em</span> ↗</span>
+      <a class="case rv" data-artist="TRO-Music" href="https://open.spotify.com/track/24ZX4PNB6BbOWQdAJUW413" target="_blank" rel="noopener">
+        <span class="cv"><span class="cv-img"><img class="duo" src="/artists/tro-music.webp" alt="TRO-Music" width="800" height="800" loading="lazy" decoding="async"></span><span class="cv-tag" data-i18n="tg_rel">Phát hành</span><span class="cv-num"><b data-num>726 nghìn</b><small data-i18n="c5u">lượt nghe Spotify</small></span></span>
+        <h3>TRO-Music</h3><span class="cs-meta"><span data-track>Đà Lạt Còn Mưa Không Em</span> ↗</span>
       </a>
       <a class="case rv" href="https://ra.co/events/1592369" target="_blank" rel="noopener">
         <span class="cv"><span class="cv-img"><img class="duo" src="/events/nick-warren.webp" alt="Nick Warren — đêm ra mắt Mixmag Asia Việt Nam" width="720" height="900" loading="lazy" decoding="async"></span><span class="cv-tag ev" data-i18n="tg_ev">Sự kiện</span><span class="cv-num"><b data-i18n="c6n">Cháy vé</b><small data-i18n="c6u">Ra mắt Mixmag Asia Việt Nam</small></span></span>
@@ -341,8 +342,9 @@
   </div>
 </section>
 
-<!-- 02 · NGHỆ SĨ — 12 người nhiều lượt nghe nhất (bảng ARTISTS trong
-     artists.html). Không có JS thì đây là một lưới ảnh bình thường. -->
+<!-- 02 · NGHỆ SĨ — 12 người nhiều lượt nghe nhất, JS dựng lại từ
+     /assets/artists-data.js. Danh sách dưới đây là bản dự phòng khi tắt JS
+     (một lưới ảnh bình thường). -->
 <section class="sec" id="artists">
   <div class="wrap">
     <div class="head">
@@ -528,6 +530,7 @@
 
 <script src="/assets/site.js"></script>
 <script src="/assets/field.js"></script>
+<script src="/assets/artists-data.js"></script>
 <script>
 /* Link cũ từ thời trang chủ còn router (#/events, #/submit) — đưa về đúng chỗ */
 if(location.hash.startsWith('#/events'))location.replace('/events');
@@ -546,11 +549,11 @@ const I18N={
     rs_h:'<span class="ln">Để kết quả</span> <span class="ln"><em>lên tiếng.</em></span>',
     rs_all:"Xem tất cả sự kiện",
     tg_rel:"Phát hành",tg_ev:"Sự kiện",
-    c1n:"2,9 triệu",c1u:"lượt nghe Spotify",c1m:"Đêm Thành Phố",
+    c1u:"lượt nghe Spotify",
     c2n:"Cháy vé",c2u:"Lần đầu tới Sài Gòn",c2m:"Boujee.SGN · 2023",
-    c3n:"1,2 triệu",c3u:"lượt nghe Spotify",c3m:"Say Một Đời Vì Em",
+    c3u:"lượt nghe Spotify",
     c4n:"18 nghệ sĩ",c4u:"2 ngày ở Khu 13",c4m:"Sài Gòn · 2019",
-    c5n:"726 nghìn",c5u:"lượt nghe Spotify",c5m:"Đà Lạt Còn Mưa Không Em",
+    c5u:"lượt nghe Spotify",
     c6n:"Cháy vé",c6u:"Ra mắt Mixmag Asia Việt Nam",c6m:"Aura Saigon · 2022",
     ar_k:"Nghệ sĩ",
     ar_h:'<span class="ln">Những nghệ sĩ đã từng</span> <span class="ln"><em>phát hành nhạc tại Haustek.</em></span>',
@@ -595,11 +598,11 @@ const I18N={
     rs_h:'<span class="ln">Let the results</span> <span class="ln"><em>do the talking.</em></span>',
     rs_all:"See all events",
     tg_rel:"Release",tg_ev:"Event",
-    c1n:"2.9M",c1u:"Spotify streams",c1m:"Đêm Thành Phố",
+    c1u:"Spotify streams",
     c2n:"Sold out",c2u:"First time in Saigon",c2m:"Boujee.SGN · 2023",
-    c3n:"1.2M",c3u:"Spotify streams",c3m:"Say Một Đời Vì Em",
+    c3u:"Spotify streams",
     c4n:"18 artists",c4u:"2 days at Khu 13",c4m:"Saigon · 2019",
-    c5n:"726K",c5u:"Spotify streams",c5m:"Đà Lạt Còn Mưa Không Em",
+    c5u:"Spotify streams",
     c6n:"Sold out",c6u:"Mixmag Asia Vietnam launch",c6m:"Aura Saigon · 2022",
     ar_k:"Artists",
     ar_h:'<span class="ln">Artists who have</span> <span class="ln"><em>released music with Haustek.</em></span>',
@@ -704,6 +707,35 @@ beatBtn.addEventListener('click',()=>{
 /* rời tab thì tắt tiếng — không ai muốn beat chạy ngầm */
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing)beatBtn.click();});
 
+/* =====================================================================
+   SỐ LIỆU TỪ BẢNG NGHỆ SĨ DÙNG CHUNG (/assets/artists-data.js)
+   Ba thẻ "Kết quả" về phát hành và vòng xoay 12 nghệ sĩ đọc thẳng bảng
+   ARTISTS — sửa lượt nghe ở đó là trang chủ tự đổi theo.
+   ===================================================================== */
+const DATA=typeof ARTISTS!=='undefined'?ARTISTS:[];
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* 2.931.346 → "2,9 triệu" / "2.9M"; 726.031 → "726 nghìn" / "726K" */
+function bigNum(n){
+  const vi=lang==='vi';
+  if(n>=999500)return (n/1e6).toFixed(1).replace('.',vi?',':'.')+(vi?' triệu':'M');
+  if(n>=1000)return Math.round(n/1000)+(vi?' nghìn':'K');
+  return n.toLocaleString(vi?'vi-VN':'en-US');
+}
+function paintCases(){
+  document.querySelectorAll('.case[data-artist]').forEach(c=>{
+    const a=DATA.find(x=>x.name===c.dataset.artist);if(!a)return;
+    if(a.streams)c.querySelector('[data-num]').textContent=bigNum(a.streams);
+    if(a.track)c.querySelector('[data-track]').textContent=a.track;
+    if(a.id)c.href=`https://open.spotify.com/${a.kind||'track'}/${a.id}`;
+  });
+}
+(function ringFromData(){
+  const st=document.querySelector('#ring .ring-stage');
+  const top=DATA.filter(a=>a.photo&&a.streams).sort((a,b)=>b.streams-a.streams).slice(0,12);
+  if(!st||top.length<6)return;   /* thiếu dữ liệu thì giữ nguyên bản HTML */
+  st.innerHTML=top.map(a=>`<a class="ring-item" href="/artists"><span class="ph"><img class="duo" src="${esc(a.photo)}" alt="${esc(a.name)}" width="800" height="800" loading="lazy" decoding="async"></span><span class="nm">${esc(a.name)}</span></a>`).join('');
+})();
+
 /* đổi ngôn ngữ — đặt sau phần beat vì nhãn nút beat cũng phải dịch */
 HK.lang(l=>{
   lang=l;const d=I18N[l];
@@ -712,6 +744,7 @@ HK.lang(l=>{
   const md=document.querySelector('meta[name="description"]');
   if(md)md.setAttribute('content',d._desc);
   paintBeat();
+  paintCases();
 });
 HK.count();
 HK.tilt('.case .cv',12);
