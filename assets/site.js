@@ -200,5 +200,15 @@
     ph.addEventListener('hk-gl-lost',()=>ph.classList.remove('gl-on'));
   })();
 
-  window.HK={lang:bindLang,current:()=>lang,reveal:reveal,loadLang:loadLang,saveLang:saveLang,count:count,tilt:tilt,stage3d:stage3d,reduced:REDUCED};
+  /* Ảnh nghệ sĩ có thêm bản 600px cùng tên trong artists/600/. Ở chỗ ảnh
+     hiện nhỏ (lưới nghệ sĩ, vòng xoay trang chủ, thẻ top 10) trình duyệt tự
+     chọn bản vừa đủ nét cho màn hình — điện thoại tải nhẹ hơn khoảng một
+     nửa. Quên làm bản 600 cho ảnh mới thì ảnh tự quay về bản 800 gốc. */
+  function photoAttrs(src,sizes){
+    if(!/^\/artists\/[^/]+\.webp$/.test(src))return `src="${src}"`;
+    return `src="${src}" srcset="${src.replace('/artists/','/artists/600/')} 600w, ${src} 800w" sizes="${sizes}"`+
+      ` onerror="this.onerror=null;this.removeAttribute('srcset')"`;
+  }
+
+  window.HK={lang:bindLang,current:()=>lang,reveal:reveal,loadLang:loadLang,saveLang:saveLang,count:count,tilt:tilt,stage3d:stage3d,reduced:REDUCED,photo:photoAttrs};
 })();

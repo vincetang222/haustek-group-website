@@ -24,9 +24,26 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400..800;1,400..800&family=Be+Vietnam+Pro:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Dữ liệu có cấu trúc: phần mô tả trang. Danh sách nghệ sĩ (ItemList)
+     dựng từ bảng ARTISTS lúc tải trang — xem structuredData() cuối file. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "https://haustek-group.com/artists#page",
+  "url": "https://haustek-group.com/artists",
+  "name": "Nghệ sĩ — Haustek",
+  "description": "Những nghệ sĩ đã từng phát hành nhạc tại Haustek — producer, DJ, rapper, vocalist trong nước và hải ngoại.",
+  "inLanguage": "vi",
+  "isPartOf": { "@type": "WebSite", "@id": "https://haustek-group.com/#website", "url": "https://haustek-group.com/", "name": "Haustek" },
+  "publisher": { "@type": "Organization", "@id": "https://haustek-group.com/#org", "name": "Haustek", "url": "https://haustek-group.com/" },
+  "mainEntity": { "@id": "https://haustek-group.com/artists#list" },
+  "breadcrumb": { "@type": "BreadcrumbList", "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "https://haustek-group.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Nghệ sĩ", "item": "https://haustek-group.com/artists" }
+  ] }
+}
+</script>
 <link rel="stylesheet" href="/assets/site.css">
 
 <style>
@@ -371,6 +388,37 @@ function spotifyUrl(a){
   return a.id ? `https://open.spotify.com/${a.kind||'track'}/${a.id}` : "";
 }
 
+/* ===================== DỮ LIỆU CÓ CẤU TRÚC =====================
+   Danh sách nghệ sĩ dạng schema.org, gắn vào <head> để Google hiểu đây là
+   các nghệ sĩ phát hành tại Haustek, kèm bài tiêu biểu, link Spotify và
+   lượt nghe. Dựng thẳng từ bảng ARTISTS nên thêm, bớt nghệ sĩ hay đổi số
+   là phần này tự theo — Google chạy JS rồi mới đọc dữ liệu có cấu trúc.
+   Thứ tự giống thứ tự mặc định trên trang: lượt nghe cao trước. */
+(function structuredData(){
+  const base="https://haustek-group.com/";
+  const list=ARTISTS.filter(a=>a.name).sort((a,b)=>(b.streams||0)-(a.streams||0));
+  const ld={"@context":"https://schema.org","@type":"ItemList","@id":base+"artists#list",
+    name:"Nghệ sĩ phát hành tại Haustek",numberOfItems:list.length,
+    itemListElement:list.map((a,i)=>{
+      const g={"@type":"MusicGroup",name:a.name};
+      if(a.photo)g.image=new URL(a.photo,base).href;
+      if(a.track){
+        const album=a.kind==="album";
+        const w={"@type":album?"MusicAlbum":"MusicRecording",name:a.track+(a.version?` (${a.version})`:"")};
+        if(a.id)w.url=spotifyUrl(a);
+        if(a.streams)w.interactionStatistic={"@type":"InteractionCounter",
+          interactionType:"https://schema.org/ListenAction",userInteractionCount:a.streams};
+        g[album?"album":"track"]=w;
+      }
+      return {"@type":"ListItem",position:i+1,item:g};
+    })};
+  const el=document.createElement('script');
+  el.type='application/ld+json';el.textContent=JSON.stringify(ld);
+  document.head.appendChild(el);
+})();
+
+/* bề ngang một ô ảnh theo lưới .grid: 2 cột → 3 cột từ 760px → 4 cột từ 1100px */
+const GRID_SIZES="(min-width:1100px) 315px, (min-width:760px) 28vw, 44vw";
 function cardHTML(a){
   const d=I18N[lang];
   const s=fmtStreams(a.streams);
@@ -380,7 +428,7 @@ function cardHTML(a){
   const title=a.track + (a.version ? ` (${a.version})` : "");
 
   const shot = a.photo
-    ? `<img class="duo" src="${a.photo}" alt="${a.name}" loading="lazy" decoding="async" width="800" height="800">`
+    ? `<img class="duo" ${HK.photo(a.photo,GRID_SIZES)} alt="${a.name}" loading="lazy" decoding="async" width="800" height="800">`
     : `<div class="fallback">${fallbackSVG(a.name)}<span class="initials">${initials(a.name)}</span></div>`;
 
   /* Nút phát chỉ là lớp giả — bấm vào mới nạp iframe của Spotify.
@@ -550,7 +598,9 @@ function eqText(){
 }
 function eqCardRender(){
   const a=TOP[eqActive],d=I18N[lang];
-  eqCard.innerHTML=`<img src="${a.photo}" alt="" width="76" height="76" decoding="async">
+  /* cùng sizes với lưới: ảnh 76px này dùng lại đúng file mà card bên dưới
+     tải, không kéo thêm một bản khác của cùng một ảnh */
+  eqCard.innerHTML=`<img ${HK.photo(a.photo,GRID_SIZES)} alt="" width="76" height="76" decoding="async">
     <div class="who"><span class="eq-rank">${String(eqActive+1).padStart(2,'0')} / ${EQN}</span>
     <b class="eq-name">${a.name}</b>
     <span class="eq-num"><b>${a.streams.toLocaleString(lang==='vi'?'vi-VN':'en-US')}</b> ${d.eq_streams}</span></div>

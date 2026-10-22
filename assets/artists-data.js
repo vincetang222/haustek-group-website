@@ -29,6 +29,9 @@
      photo    Đường dẫn ảnh, ví dụ "artists/tuan-hung.webp".
               Ảnh phải VUÔNG (1:1), nên xuất ở 800x800 và lưu dạng .webp.
               Bỏ tất cả vào thư mục artists/ ở gốc website (cạnh artists.html).
+              Nên xuất thêm một bản 600x600 CÙNG TÊN vào artists/600/ —
+              điện thoại sẽ tải bản nhỏ này. Quên thì trang vẫn chạy, chỉ
+              là tải bản 800 nặng hơn.
               Để trống thì card dùng khối chữ viết tắt trên nền sóng.
 
    Thứ tự trong bảng không quan trọng — trang tự sắp theo lượt nghe.

@@ -164,6 +164,11 @@ Giải thích các trường:
 Ảnh gốc chụp ra thường 3000×3000 và nặng vài MB — nén xuống webp 800px thì chỉ còn
 khoảng 20–100KB mỗi ảnh mà nhìn vẫn nét, tải nhanh hơn rất nhiều trên mạng di động.
 
+Xuất thêm một bản **600×600 cùng tên** vào `artists/600/` (ví dụ `artists/600/tri-minh.webp`).
+Ở lưới nghệ sĩ và vòng xoay trang chủ, điện thoại tự chọn bản 600 này — trang Nghệ sĩ
+trên điện thoại nhẹ đi gần một nửa mà nhìn không khác. Quên bản 600 thì trang vẫn chạy,
+ảnh tự quay về bản 800.
+
 Vòng cột 3D ở đầu trang Nghệ sĩ, vòng xoay ảnh và 3 thẻ Kết quả ở trang chủ đều tự lấy từ bảng này — sửa bảng là tất cả tự đổi theo.
 
 **Đừng ghi số ước lượng vào `streams`.** Con số sai trên trang công khai thì nghệ sĩ và đối tác đều nhận ra ngay. Chưa có số thật thì để `null`, card sẽ ghi "Đang cập nhật" — trông đàng hoàng hơn nhiều so với một con số bịa.
@@ -206,7 +211,9 @@ Code đã tự xử lý: tắt video nếu người dùng bật chế độ gi�
 
 - **Không có cookie theo dõi, không Google Analytics, không pixel quảng cáo.** Chính sách cookie đã công bố điều này. Nếu sau này thêm công cụ đo, phải cập nhật lại `legal.html`
 - **Không tự động phát âm thanh.** Beat 124 BPM ở trang chủ chỉ chạy khi bấm nút (rời tab là tự tắt); trình phát Spotify/YouTube chỉ được tải khi bấm nút phát, đóng là gỡ hẳn
-- **Đồ hoạ 3D không dùng thư viện ngoài.** `assets/field.js` là WebGL thuần, vài KB, không gọi máy chủ bên thứ ba nào — chính sách quyền riêng tư chỉ kể tên Google Fonts. Máy không có WebGL thì hiện hoạ tiết sóng tĩnh; vòng xoay nghệ sĩ và quả cầu cửa hàng là CSS 3D, tắt JS thì thành lưới ảnh / danh sách bình thường
+- **Phông chữ lưu ngay trên website** (`assets/fonts/`, khai báo ở đầu `assets/site.css`), không gọi Google Fonts. Nhờ vậy mở trang không kết nối tới bên thứ ba nào, và `legal.html` ghi đúng như thế. Đổi lại sang Google Fonts thì phải sửa lại bảng trong mục Cookie của `legal.html`
+- **Dữ liệu có cấu trúc (schema.org):** trang chủ có Organization, WebSite, MusicGroup viết sẵn trong `<head>`; trang Nghệ sĩ có CollectionPage viết sẵn, còn danh sách nghệ sĩ (ItemList) do JS dựng từ `assets/artists-data.js` nên tự theo khi thêm, bớt nghệ sĩ
+- **Đồ hoạ 3D không dùng thư viện ngoài.** `assets/field.js` là WebGL thuần, vài KB, không gọi máy chủ bên thứ ba nào. Máy không có WebGL thì hiện hoạ tiết sóng tĩnh; vòng xoay nghệ sĩ và quả cầu cửa hàng là CSS 3D, tắt JS thì thành lưới ảnh / danh sách bình thường
 - **Ảnh trong vòng xoay trang chủ** là 12 nghệ sĩ nhiều lượt nghe nhất trong `assets/artists-data.js`, JS dựng lại mỗi lần tải trang; danh sách viết sẵn trong HTML chỉ là bản dự phòng khi tắt JS
 - **6 thẻ "Kết quả" ở trang chủ**: 3 thẻ phát hành (có `data-artist`) lấy lượt nghe và tên bài từ `assets/artists-data.js`; 3 thẻ sự kiện ghi tay từ `ARCHIVE` của `events.html`. Mỗi thẻ dẫn tới nguồn để khách tự kiểm chứng
 - **Trang Sự kiện:** đường hầm 3D dựng từ 12 poster trong khối `#headliners` (xếp từ mới tới cũ — thêm poster thì giữ đúng thứ tự ngày); ba dự án là bảng `SET_GROUPS` (mỗi nhóm có `year`, `stats` và danh sách set; tên và dòng mô tả nằm trong `I18N` với khoá `grp_…`, `sub_…`); cột 3D theo tỉnh/thành tự đếm từ `ARCHIVE`. Thành phố của mỗi đêm suy ra từ bảng `VENUE_CITY` (tên địa điểm → thành phố) và `EVENT_CITY` (theo mã sự kiện RA, cho đêm không ghi địa điểm). Địa điểm chưa có trong bảng thì đêm đó không vào cột nào (vẫn hiện trong danh sách "Tất cả") — thêm một dòng vào `VENUE_CITY` là xong. Cố ý không vẽ theo năm vì số đêm mỗi năm lên xuống, nhìn như làm không đều
