@@ -35,7 +35,8 @@
               Để trống thì card dùng khối chữ viết tắt trên nền sóng.
 
    Thứ tự trong bảng không quan trọng — trang tự sắp theo lượt nghe.
-   Lượt nghe đọc trên trang Spotify của từng bài ngày 22.10.2026. Spotify
+   Lượt nghe đọc trên trang Spotify của từng bài ngày 22.10.2026 (riêng
+   Thiện Hí đọc ngày 27.10.2026, lúc đổi sang bài Calling Saigon). Spotify
    không hiện số khi bài dưới 1.000 lượt — khi đó để streams:null.
    ===================================================================== */
 
@@ -70,5 +71,5 @@ const ARTISTS = [
   /* Hai người mới, thêm 31.07 — cả hai xác nhận là bài lẻ thật (không phải
      bản ghi set/DJ tại sự kiện), phát hành qua Haustek Records / sub-label. */
   { name:"Ro-TUNE", track:"Long Way Home", kind:"track", id:"0L4sFKd7mCeFD9ewRu9aNX", streams:null, role:"", photo:"/artists/ro-tune.webp" },
-  { name:"Thiện Hí", track:"Đành Thôi Xa Cách", kind:"track", id:"6rfaZP4OoIep5aGB26IALu", streams:651674, role:"", photo:"/artists/thien-hi.webp" }
+  { name:"Thiện Hí", track:"Calling Saigon", kind:"track", id:"06BD3Yl1K3U84KB8yPdWBd", streams:210631, role:"", photo:"/artists/thien-hi.webp" }
 ];
