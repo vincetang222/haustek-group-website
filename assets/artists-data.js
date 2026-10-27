@@ -40,8 +40,6 @@
    ===================================================================== */
 
 const ARTISTS = [
-  { name:"HƯƠNGMYBÔNG", track:"Say Một Đời Vì Em", version:"Phiên Bản Nam", kind:"track", id:"36HDVYZL4whJgqHte9NHBx", streams:1335691, role:"", photo:"/artists/huongmybong.webp" },
-  { name:"TRO-Music", track:"ĐÀ LẠT CÒN MƯA KHÔNG EM", kind:"track", id:"24ZX4PNB6BbOWQdAJUW413", streams:832478, role:"", photo:"/artists/tro-music.webp" },
   { name:"Microwave", track:"Tìm Lại", kind:"track", id:"4ZtmF5ZseBMGWRgibW3bKJ", streams:753571, role:"", photo:"/artists/microwave.webp" },
   { name:"Trí Minh", track:"Để Gió Cuốn Đi", kind:"track", id:"3hGOyaXpY13pVSHyEd2KVM", streams:327401, role:"", photo:"/artists/tri-minh.webp" },
   { name:"nae & de'lay", track:"Đắp Chăn Bông", kind:"track", id:"6CMROH0r43Pot5yE955p2T", streams:354104, role:"", photo:"/artists/nae-delay.webp" },
