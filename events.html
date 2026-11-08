@@ -24,7 +24,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<!-- Dữ liệu có cấu trúc: 13 đêm nổi bật (bbno$ lấy theo bài NME; 12 đêm còn
+<!-- Dữ liệu có cấu trúc: 13 đêm nổi bật (bbno$ lấy theo bài NME và poster đêm diễn; 12 đêm còn
      lại lấy ngày, địa điểm từ bảng ARCHIVE theo mã sự kiện Resident Advisor)
      và phần Hỏi đáp. Sửa thẻ hoặc câu hỏi
      bên dưới thì sửa cả khối này cho khớp. -->
@@ -83,7 +83,7 @@
      "position": 1,
      "item": {
       "@type": "MusicEvent",
-      "name": "bbno$ — First Asia Tour, Ho Chi Minh City",
+      "name": "Balling Loud: bbno$ — First Asia Tour",
       "startDate": "2022-10-06",
       "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
       "location": {
@@ -91,12 +91,13 @@
        "name": "11:11 Club",
        "address": {
         "@type": "PostalAddress",
+        "streetAddress": "134 Nguyễn Thái Học, Quận 1",
         "addressLocality": "Thành phố Hồ Chí Minh",
         "addressCountry": "VN"
        }
       },
-      "image": "https://haustek-group.com/events/bbno.webp",
-      "description": "Rapper Canada mở màn tour châu Á đầu tiên tại Sài Gòn, hai tuần trước khi album bag or die ra mắt. Haustek mời về.",
+      "image": "https://haustek-group.com/events/bbno-balling-loud.webp",
+      "description": "Rapper Canada mở màn tour châu Á đầu tiên trong đêm Balling Loud ở Sài Gòn, hai tuần trước khi album bag or die ra mắt. Haustek mời về.",
       "url": "https://www.nme.com/news/music/bbno-announces-vietnam-malaysia-and-indonesia-tour-dates-3308137",
       "organizer": {
        "@id": "https://haustek-group.com/#org"
@@ -749,14 +750,14 @@ html:not(.js) .yb{display:none}   /* tắt JS: không có cột, danh sách bên
     </header>
     <div class="hl-grid">
 
-    <!-- Đêm nổi bật nhất đứng đầu (không theo ngày). Chưa có ảnh thật của
-         đêm này nên tạm dùng poster chữ /events/bbno.webp — có ảnh thì thay. -->
+    <!-- Đêm nổi bật nhất đứng đầu (không theo ngày). Ảnh: poster của đêm
+         Balling Loud, cắt dọc 4:5. -->
     <a class="hl" href="https://www.nme.com/news/music/bbno-announces-vietnam-malaysia-and-indonesia-tour-dates-3308137" target="_blank" rel="noopener">
       <span class="hl-badge">FIRST ASIA TOUR</span>
-      <span class="hl-shot"><img class="duo" width="720" height="900" decoding="async" src="/events/bbno.webp" alt="bbno$ — tour châu Á đầu tiên, 11:11 Club, Sài Gòn" loading="lazy"></span>
+      <span class="hl-shot"><img class="duo" width="720" height="900" decoding="async" src="/events/bbno-balling-loud.webp" alt="bbno$ trên poster đêm Balling Loud, 11:11 Club, Sài Gòn" loading="lazy"></span>
       <span class="hl-body">
         <span class="hl-name">bbno$</span>
-        <span class="hl-note" data-i18n="hl_bb">Rapper Canada mở màn tour châu Á đầu tiên tại Sài Gòn, hai tuần trước khi album bag or die ra mắt. Haustek mời về.</span>
+        <span class="hl-note" data-i18n="hl_bb">Rapper Canada mở màn tour châu Á đầu tiên trong đêm Balling Loud ở Sài Gòn, hai tuần trước khi album bag or die ra mắt. Haustek mời về.</span>
         <span class="hl-meta">11:11 Club, Sài Gòn · 06.10.2022</span><br>
         <span class="hl-src">NME ↗</span>
       </span>
@@ -1086,7 +1087,7 @@ const I18N={
     openYT:"Mở trên YouTube",
     hl_k:"Đầu bảng quốc tế",
     hl_h:'<span class="ln">Những đêm</span> <span class="ln"><em>đáng nhớ nhất.</em></span>',
-    hl_bb:"Rapper Canada mở màn tour châu Á đầu tiên tại Sài Gòn, hai tuần trước khi album bag or die ra mắt. Haustek mời về.",
+    hl_bb:"Rapper Canada mở màn tour châu Á đầu tiên trong đêm Balling Loud ở Sài Gòn, hai tuần trước khi album bag or die ra mắt. Haustek mời về.",
     hl_1:"Boiler Room chọn Sài Gòn — Haustek đồng tổ chức, 18 nghệ sĩ trong hai ngày tại Khu 13.",
     hl_2:"Lần đầu chơi ở Sài Gòn, trong tour châu Á của album Mosaiik 2.",
     hl_3:"Đêm ra mắt Mixmag Asia Việt Nam.",
@@ -1141,7 +1142,7 @@ const I18N={
     openYT:"Open on YouTube",
     hl_k:"International headliners",
     hl_h:'<span class="ln">The nights</span> <span class="ln"><em>people still talk about.</em></span>',
-    hl_bb:"Opened the Canadian rapper's first-ever Asia tour in Saigon, two weeks before the album bag or die came out. Brought over by Haustek.",
+    hl_bb:"Opened the Canadian rapper's first-ever Asia tour at Balling Loud in Saigon, two weeks before the album bag or die came out. Brought over by Haustek.",
     hl_1:"Boiler Room picked Saigon — Haustek co-promoted, 18 artists over two days at Khu 13.",
     hl_2:"Their first time in Saigon, on the Asia tour for Mosaiik 2.",
     hl_3:"The launch night for Mixmag Asia Vietnam.",
