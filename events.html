@@ -24,6 +24,447 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<!-- Dữ liệu có cấu trúc: 12 đêm nổi bật (ngày, địa điểm lấy từ bảng ARCHIVE
+     theo mã sự kiện Resident Advisor) và phần Hỏi đáp. Sửa thẻ hoặc câu hỏi
+     bên dưới thì sửa cả khối này cho khớp. -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "CollectionPage",
+   "@id": "https://haustek-group.com/events#page",
+   "url": "https://haustek-group.com/events",
+   "name": "Sự kiện — Haustek",
+   "description": "Những đêm mà Haustek đứng sau ánh đèn sân khấu — từ club nights ở Việt Nam đến chuỗi livestream quốc tế United We Stream Asia và Boiler Room.",
+   "inLanguage": "vi",
+   "isPartOf": {
+    "@type": "WebSite",
+    "@id": "https://haustek-group.com/#website",
+    "url": "https://haustek-group.com/",
+    "name": "Haustek"
+   },
+   "publisher": {
+    "@type": "Organization",
+    "@id": "https://haustek-group.com/#org",
+    "name": "Haustek",
+    "url": "https://haustek-group.com/"
+   },
+   "mainEntity": {
+    "@id": "https://haustek-group.com/events#highlights"
+   },
+   "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+     {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Trang chủ",
+      "item": "https://haustek-group.com/"
+     },
+     {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sự kiện",
+      "item": "https://haustek-group.com/events"
+     }
+    ]
+   }
+  },
+  {
+   "@type": "ItemList",
+   "@id": "https://haustek-group.com/events#highlights",
+   "name": "Những đêm đáng nhớ nhất",
+   "numberOfItems": 12,
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "THE ABYSS RAVE — kỷ niệm 8 năm Haustek",
+      "startDate": "2025-03-08",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Arcan",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/milo-raad.webp",
+      "description": "Techno sâu từ Belgrade, ra đĩa trên Soma và Mord — trong đêm kỷ niệm 8 năm Haustek, cùng Xhin và KONKRETE.",
+      "url": "https://ra.co/events/2036372",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "Milo Raad"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "Boujee Station: Das Pharaoh, Paul Thomas [UV] | hosted by Tùng Tím",
+      "startDate": "2023-11-25",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Boujee.SGN",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/das-pharaoh.webp",
+      "description": "Fadi của bộ đôi trance Aly & Fila, chơi cùng Paul Thomas trong đêm hãng đĩa UV.",
+      "url": "https://ra.co/events/1794249",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "Das Pharaoh"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "Boujee Station: Cosmic Gate, Thien Hi, D.A | hosted by Tung Tim",
+      "startDate": "2023-09-16",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Boujee.SGN",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/cosmic-gate.webp",
+      "description": "Lần đầu chơi tại Sài Gòn, trong tour châu Á album Mosaiik 2.",
+      "url": "https://ra.co/events/1744061",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "MusicGroup",
+       "name": "Cosmic Gate"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "Oliver Smith (Anjunabeats) by trancevn, hausvn & Aura Saigon",
+      "startDate": "2022-12-09",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Aura Saigon",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/oliver-smith.webp",
+      "description": "Nghệ sĩ đầu tiên ký với Anjunabeats, từng chơi Tomorrowland và Creamfields.",
+      "url": "https://ra.co/events/1601605",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "Oliver Smith"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 5,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "Mixmag Asia Vietnam Official Launching Event: Nick Warren, Thien Hi",
+      "startDate": "2022-11-25",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Aura Saigon",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/nick-warren.webp",
+      "description": "Đêm ra mắt chính thức của Mixmag Asia Việt Nam.",
+      "url": "https://ra.co/events/1592369",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "Nick Warren"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 6,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "techno.vn invites: Xhin, Tri Minh (live), Ro-Tune (live), ling:chi, KONKRETE, & Ke Ling",
+      "startDate": "2022-11-12",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Aura Saigon",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/xhin.webp",
+      "description": "Stroboscopic Artefacts, Singapore — chơi cùng Trí Minh, Ro-TUNE, ling:chi và KONKRETE.",
+      "url": "https://ra.co/events/1608918",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "Xhin"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 7,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "John 00 Fleming [Open till Close] by hausvn & Aura Saigon",
+      "startDate": "2022-09-24",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Aura Saigon",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/john-00-fleming.webp",
+      "description": "Huyền thoại trance, chơi xuyên đêm từ mở cửa tới đóng cửa.",
+      "url": "https://ra.co/events/1574941",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "John 00 Fleming"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 8,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "hausvn pres. Roy Rosenfeld (All Day I Dream) [Extended Set]",
+      "startDate": "2022-08-19",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Aura Saigon",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/roy-rosenfeld.webp",
+      "description": "Gương mặt All Day I Dream, extended set trong đêm hausvn × Aura.",
+      "url": "https://ra.co/events/1563942",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "Roy Rosenfeld"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 9,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "haus.vn presents Marsh (Anjunadeep) [Extended Set]",
+      "startDate": "2022-05-20",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Aura Saigon",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/marsh.webp",
+      "description": "Anjunadeep, extended set — một trong bốn đêm cháy vé của Haustek.",
+      "url": "https://ra.co/events/1529411",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "Marsh"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 10,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "Boiler Room Ho-Chi Minh City: Khu 13 x Haustek",
+      "startDate": "2019-10-19",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Khu 13",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/boiler-room.webp",
+      "description": "Boiler Room chọn Sài Gòn — Haustek đồng tổ chức, 18 nghệ sĩ trong hai ngày tại Khu 13.",
+      "url": "https://ra.co/events/1309879",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 11,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "Techno.vn x 6AM: Truncate [50 Weapons], JIA, Derek Nielsen, Kiko Bacio, Attiss Ngo",
+      "startDate": "2019-07-06",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Savage",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Hà Nội",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/truncate.webp",
+      "description": "50 Weapons — techno Los Angeles, trong đêm techno.vn × 6AM.",
+      "url": "https://ra.co/events/1245857",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "Truncate"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 12,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "Kumquat Pres. Ben Böhmer (Live) [Anjunadeep, Ton Töpferei]",
+      "startDate": "2019-05-18",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "Kumquat Tree",
+       "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/ben-bohmer.webp",
+      "description": "Live set của gương mặt Anjunadeep, hai đêm liên tiếp tại Sài Gòn.",
+      "url": "https://ra.co/events/1250083",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "Ben Böhmer"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://haustek-group.com/events#faq",
+   "url": "https://haustek-group.com/events",
+   "inLanguage": "vi",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Haustek tổ chức những loại sự kiện nào?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Club night, đêm của label, sân khấu festival, sự kiện cho nhãn hàng và livestream."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Có mời được nghệ sĩ quốc tế không?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Được. Cosmic Gate, Nick Warren, Ben Böhmer, Xhin… đều do Haustek mời về. Nên tính trước 3–6 tháng vì còn lịch tour và thủ tục nhập cảnh."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Haustek lo trọn gói hay chỉ phần nhạc?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Trọn gói được: line-up, âm thanh, ánh sáng, visual, truyền thông, quay phim. Bạn có sẵn phần nào thì Haustek chỉ làm phần còn thiếu."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Chi phí thế nào?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Tuỳ nghệ sĩ, quy mô và thiết bị. Gửi sức chứa, ngày dự kiến, dòng nhạc và ngân sách tới mgmt@haustek-group.com, chúng tôi báo giá cụ thể."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
 <link rel="stylesheet" href="/assets/site.css">
 
 <style>

@@ -40,6 +40,7 @@ Repo này (`haustek-group-website`) chỉ chứa website công khai. CRM, portal
 |---|---|
 | `robots.txt` | Cho phép Google lập chỉ mục toàn bộ trang |
 | `sitemap.xml` | Danh sách trang để Google tìm nhanh hơn |
+| `llms.txt` | Tóm tắt Haustek cho ChatGPT, Perplexity, Claude… đọc và trích dẫn đúng. Đổi dịch vụ, số liệu hay email thì sửa cả file này |
 
 ### Không upload lên web — dùng ở nơi khác
 

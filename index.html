@@ -38,7 +38,8 @@
   "@graph": [
     { "@type": "Organization", "@id": "https://haustek-group.com/#org", "name": "Haustek", "url": "https://haustek-group.com/", "email": "mgmt@haustek-group.com", "foundingDate": "2017", "foundingLocation": {"@type":"Place","name":"Vietnam"}, "description": "Music label & distribution — sự kiện, sản xuất, phát hành, quảng bá và tư vấn chiến lược cho âm nhạc, từ 2017.", "sameAs": ["https://www.facebook.com/haustek.agency","https://www.instagram.com/haustek.agency","https://open.spotify.com/artist/1jiigt5sMZ62es2sH1UwYU","https://ra.co/promoters/73233"] },
     { "@type": "WebSite", "@id": "https://haustek-group.com/#website", "url": "https://haustek-group.com/", "name": "Haustek", "inLanguage": "vi", "publisher": {"@id":"https://haustek-group.com/#org"} },
-    { "@type": "MusicGroup", "name": "Haustek", "url": "https://haustek-group.com/", "genre": ["Electronic","Techno","House","Ambient"], "foundingDate": "2017" }
+    { "@type": "MusicGroup", "name": "Haustek", "url": "https://haustek-group.com/", "genre": ["Electronic","Techno","House","Ambient"], "foundingDate": "2017" },
+    {"@type": "FAQPage", "@id": "https://haustek-group.com/#faq", "url": "https://haustek-group.com/", "inLanguage": "vi", "mainEntity": [{"@type": "Question", "name": "Muốn phát hành nhạc với Haustek thì bắt đầu từ đâu?", "acceptedAnswer": {"@type": "Answer", "text": "Gửi link nghe thử và vài dòng về bạn tới mgmt@haustek-group.com. Bài nào gửi tới, chúng tôi cũng nghe."}}, {"@type": "Question", "name": "Nhạc của tôi sẽ có mặt ở đâu?", "acceptedAnswer": {"@type": "Answer", "text": "Spotify, Apple Music, TikTok, YouTube Music, NhacCuaTui, Zing MP3 và hơn 200 cửa hàng nhạc số khác."}}, {"@type": "Question", "name": "Bao lâu thì bài lên sóng?", "acceptedAnswer": {"@type": "Answer", "text": "Thường 1–2 tuần, gấp thì 24–36 giờ. Muốn được đề xuất vào playlist thì nên gửi trước 3–4 tuần."}}, {"@type": "Question", "name": "Bản quyền có còn là của tôi không?", "acceptedAnswer": {"@type": "Answer", "text": "Còn. Bài vẫn là của bạn. Tỷ lệ chia doanh thu được thống nhất rõ trước khi phát hành."}}]}
   ]
 }
 </script>
@@ -78,6 +79,8 @@
 .hero-in{position:relative;z-index:1;pointer-events:none}
 .hero-in a,.hero-in button{pointer-events:auto}
 .hero h1{margin:22px 0 22px;max-width:11ch}
+/* một dòng nói rõ Haustek làm gì — người mới vào hiểu ngay trong vài giây */
+.hero-sub{margin:0;max-width:46ch}
 .hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:30px}
 .hero-in>*{animation:rise .8s var(--ease) both}
 .hero-in>:nth-child(2){animation-delay:.08s}
@@ -279,8 +282,9 @@
   <div class="wrap hero-in">
     <p class="label" data-i18n="hero_k">Music label &amp; distribution · từ 2017</p>
     <h1 data-i18n="h1"><span class="ln">Để nhạc Việt</span> <span class="ln"><em>vang xa</em> hơn.</span></h1>
+    <p class="lead hero-sub" data-i18n="hero_sub">Phát hành nhạc lên Spotify, Apple Music, TikTok và 200+ cửa hàng nhạc số. Kèm sản xuất, sự kiện và booking.</p>
     <div class="hero-cta">
-      <a class="btn btn-red" href="#contact"><span data-i18n="cta_work">Liên hệ hợp tác</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-red" href="mailto:mgmt@haustek-group.com?subject=%5BPH%C3%81T%20H%C3%80NH%5D%20"><span data-i18n="cta_work">Gửi nhạc cho Haustek</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a class="btn" href="#results" data-i18n="cta_results">Xem kết quả</a>
       <div class="beat-dock">
         <button class="beat" id="beatBtn" type="button" aria-pressed="false" aria-label="Bật beat"><svg viewBox="0 0 10 12" aria-hidden="true"><path id="beatIco" d="M0 0l10 6L0 12z"/></svg></button>
@@ -540,7 +544,8 @@ const I18N={
     _desc:"Haustek — music label & distribution từ 2017. Phát hành, sản xuất, sự kiện và booking. Đưa nhạc Việt lên Spotify, Apple Music, TikTok, NhacCuaTui, Zing MP3 và hơn 200 cửa hàng nhạc số.",
     hero_k:"Music label &amp; distribution · từ 2017",
     h1:'<span class="ln">Để nhạc Việt</span> <span class="ln"><em>vang xa</em> hơn.</span>',
-    cta_work:"Liên hệ hợp tác",cta_results:"Xem kết quả",
+    hero_sub:"Phát hành nhạc lên Spotify, Apple Music, TikTok và 200+ cửa hàng nhạc số. Kèm sản xuất, sự kiện và booking.",
+    cta_work:"Gửi nhạc cho Haustek",cta_results:"Xem kết quả",
     beat_on:"Bật beat",beat_off:"Tắt beat",beat_hint:"124 BPM · rê chuột để tạo sóng",beat_hint_t:"124 BPM · chạm để tạo sóng",beat_aria_on:"Bật beat",beat_aria_off:"Tắt beat",
     st_streams:"Lượt nghe",st_rel:"Bản phát hành",st_stores:"Cửa hàng nhạc số",st_nights:"Đêm diễn",
     rs_k:"Kết quả",
@@ -589,7 +594,8 @@ const I18N={
     _desc:"Haustek — music label & distribution since 2017. Releases, production, events and booking. Vietnamese music on Spotify, Apple Music, TikTok, NhacCuaTui, Zing MP3 and 200+ digital stores.",
     hero_k:"Music label &amp; distribution · since 2017",
     h1:'<span class="ln">Made in Vietnam.</span> <span class="ln"><em>Heard</em> worldwide.</span>',
-    cta_work:"Work with us",cta_results:"See the results",
+    hero_sub:"Releases on Spotify, Apple Music, TikTok and 200+ digital stores. Plus production, events and booking.",
+    cta_work:"Send us your music",cta_results:"See the results",
     beat_on:"Play the beat",beat_off:"Stop the beat",beat_hint:"124 BPM · move to make waves",beat_hint_t:"124 BPM · tap to make waves",beat_aria_on:"Play the beat",beat_aria_off:"Stop the beat",
     st_streams:"Streams",st_rel:"Releases",st_stores:"Digital stores",st_nights:"Nights",
     rs_k:"Results",
