@@ -24,8 +24,9 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<!-- Dữ liệu có cấu trúc: 12 đêm nổi bật (ngày, địa điểm lấy từ bảng ARCHIVE
-     theo mã sự kiện Resident Advisor) và phần Hỏi đáp. Sửa thẻ hoặc câu hỏi
+<!-- Dữ liệu có cấu trúc: 13 đêm nổi bật (bbno$ lấy theo bài NME; 12 đêm còn
+     lại lấy ngày, địa điểm từ bảng ARCHIVE theo mã sự kiện Resident Advisor)
+     và phần Hỏi đáp. Sửa thẻ hoặc câu hỏi
      bên dưới thì sửa cả khối này cho khớp. -->
 <script type="application/ld+json">
 {
@@ -75,11 +76,40 @@
    "@type": "ItemList",
    "@id": "https://haustek-group.com/events#highlights",
    "name": "Những đêm đáng nhớ nhất",
-   "numberOfItems": 12,
+   "numberOfItems": 13,
    "itemListElement": [
     {
      "@type": "ListItem",
      "position": 1,
+     "item": {
+      "@type": "MusicEvent",
+      "name": "bbno$ — First Asia Tour, Ho Chi Minh City",
+      "startDate": "2022-10-06",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+       "@type": "Place",
+       "name": "11:11 Club",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Thành phố Hồ Chí Minh",
+        "addressCountry": "VN"
+       }
+      },
+      "image": "https://haustek-group.com/events/bbno.webp",
+      "description": "Rapper Canada mở màn tour châu Á đầu tiên tại Sài Gòn, hai tuần trước khi album bag or die ra mắt. Haustek mời về.",
+      "url": "https://www.nme.com/news/music/bbno-announces-vietnam-malaysia-and-indonesia-tour-dates-3308137",
+      "organizer": {
+       "@id": "https://haustek-group.com/#org"
+      },
+      "performer": {
+       "@type": "Person",
+       "name": "bbno$"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
      "item": {
       "@type": "MusicEvent",
       "name": "THE ABYSS RAVE — kỷ niệm 8 năm Haustek",
@@ -108,7 +138,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 2,
+     "position": 3,
      "item": {
       "@type": "MusicEvent",
       "name": "Boujee Station: Das Pharaoh, Paul Thomas [UV] | hosted by Tùng Tím",
@@ -137,7 +167,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 3,
+     "position": 4,
      "item": {
       "@type": "MusicEvent",
       "name": "Boujee Station: Cosmic Gate, Thien Hi, D.A | hosted by Tung Tim",
@@ -166,7 +196,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 4,
+     "position": 5,
      "item": {
       "@type": "MusicEvent",
       "name": "Oliver Smith (Anjunabeats) by trancevn, hausvn & Aura Saigon",
@@ -195,7 +225,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 5,
+     "position": 6,
      "item": {
       "@type": "MusicEvent",
       "name": "Mixmag Asia Vietnam Official Launching Event: Nick Warren, Thien Hi",
@@ -224,7 +254,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 6,
+     "position": 7,
      "item": {
       "@type": "MusicEvent",
       "name": "techno.vn invites: Xhin, Tri Minh (live), Ro-Tune (live), ling:chi, KONKRETE, & Ke Ling",
@@ -253,7 +283,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 7,
+     "position": 8,
      "item": {
       "@type": "MusicEvent",
       "name": "John 00 Fleming [Open till Close] by hausvn & Aura Saigon",
@@ -282,7 +312,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 8,
+     "position": 9,
      "item": {
       "@type": "MusicEvent",
       "name": "hausvn pres. Roy Rosenfeld (All Day I Dream) [Extended Set]",
@@ -311,7 +341,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 9,
+     "position": 10,
      "item": {
       "@type": "MusicEvent",
       "name": "haus.vn presents Marsh (Anjunadeep) [Extended Set]",
@@ -340,7 +370,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 10,
+     "position": 11,
      "item": {
       "@type": "MusicEvent",
       "name": "Boiler Room Ho-Chi Minh City: Khu 13 x Haustek",
@@ -365,7 +395,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 11,
+     "position": 12,
      "item": {
       "@type": "MusicEvent",
       "name": "Techno.vn x 6AM: Truncate [50 Weapons], JIA, Derek Nielsen, Kiko Bacio, Attiss Ngo",
@@ -394,7 +424,7 @@
     },
     {
      "@type": "ListItem",
-     "position": 12,
+     "position": 13,
      "item": {
       "@type": "MusicEvent",
       "name": "Kumquat Pres. Ben Böhmer (Live) [Anjunadeep, Ton Töpferei]",
@@ -441,7 +471,7 @@
      "name": "Có mời được nghệ sĩ quốc tế không?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Được. Cosmic Gate, Nick Warren, Ben Böhmer, Xhin… đều do Haustek mời về. Nên tính trước 3–6 tháng vì còn lịch tour và thủ tục nhập cảnh."
+      "text": "Được. bbno$, Cosmic Gate, Nick Warren, Ben Böhmer, Xhin… đều do Haustek mời về. Nên tính trước 3–6 tháng vì còn lịch tour và thủ tục nhập cảnh."
      }
     },
     {
@@ -472,8 +502,8 @@
    SỰ KIỆN — chỉ phần riêng của trang; khung chung ở /assets/site.css.
    Kết quả trước, chữ sau:
      • đầu trang: 249 đêm + ba con số
-     • 01 đường hầm 3D: cuộn xuống là bay xuyên qua 12 poster đầu bảng,
-       từ đêm mới nhất về đêm cũ nhất
+     • 01 đường hầm 3D: cuộn xuống là bay xuyên qua 13 poster đầu bảng —
+       bbno$ đứng đầu, sau đó từ đêm mới nhất về đêm cũ nhất
      • 02 ba dự án lớn, mỗi dự án vài con số + toàn bộ set quay lại
      • 03 lưu trữ: cột 3D số đêm ở mỗi tỉnh/thành, bấm cột để lọc danh sách
    Giảm chuyển động / tắt JS thì đường hầm trở về lưới poster bình thường.
@@ -718,6 +748,19 @@ html:not(.js) .yb{display:none}   /* tắt JS: không có cột, danh sách bên
       <h2 class="rv" data-i18n="hl_h"><span class="ln">Những đêm</span> <span class="ln"><em>đáng nhớ nhất.</em></span></h2>
     </header>
     <div class="hl-grid">
+
+    <!-- Đêm nổi bật nhất đứng đầu (không theo ngày). Chưa có ảnh thật của
+         đêm này nên tạm dùng poster chữ /events/bbno.webp — có ảnh thì thay. -->
+    <a class="hl" href="https://www.nme.com/news/music/bbno-announces-vietnam-malaysia-and-indonesia-tour-dates-3308137" target="_blank" rel="noopener">
+      <span class="hl-badge">FIRST ASIA TOUR</span>
+      <span class="hl-shot"><img class="duo" width="720" height="900" decoding="async" src="/events/bbno.webp" alt="bbno$ — tour châu Á đầu tiên, 11:11 Club, Sài Gòn" loading="lazy"></span>
+      <span class="hl-body">
+        <span class="hl-name">bbno$</span>
+        <span class="hl-note" data-i18n="hl_bb">Rapper Canada mở màn tour châu Á đầu tiên tại Sài Gòn, hai tuần trước khi album bag or die ra mắt. Haustek mời về.</span>
+        <span class="hl-meta">11:11 Club, Sài Gòn · 06.10.2022</span><br>
+        <span class="hl-src">NME ↗</span>
+      </span>
+    </a>
 
     <a class="hl" href="https://ra.co/events/2036372" target="_blank" rel="noopener">
       <span class="hl-shot"><img class="duo" width="720" height="900" decoding="async" src="/events/milo-raad.webp" alt="Milo Raad" loading="lazy"></span>
@@ -1043,6 +1086,7 @@ const I18N={
     openYT:"Mở trên YouTube",
     hl_k:"Đầu bảng quốc tế",
     hl_h:'<span class="ln">Những đêm</span> <span class="ln"><em>đáng nhớ nhất.</em></span>',
+    hl_bb:"Rapper Canada mở màn tour châu Á đầu tiên tại Sài Gòn, hai tuần trước khi album bag or die ra mắt. Haustek mời về.",
     hl_1:"Boiler Room chọn Sài Gòn — Haustek đồng tổ chức, 18 nghệ sĩ trong hai ngày tại Khu 13.",
     hl_2:"Lần đầu chơi ở Sài Gòn, trong tour châu Á của album Mosaiik 2.",
     hl_3:"Đêm ra mắt Mixmag Asia Việt Nam.",
@@ -1073,7 +1117,7 @@ const I18N={
     fq1:"Haustek tổ chức những loại sự kiện nào?",
     fa1:"Club night, đêm của label, sân khấu festival, sự kiện cho nhãn hàng và livestream.",
     fq2:"Có mời được nghệ sĩ quốc tế không?",
-    fa2:"Được. Cosmic Gate, Nick Warren, Ben Böhmer, Xhin… đều do Haustek mời về. Nên tính trước 3–6 tháng vì còn lịch tour và thủ tục nhập cảnh.",
+    fa2:"Được. bbno$, Cosmic Gate, Nick Warren, Ben Böhmer, Xhin… đều do Haustek mời về. Nên tính trước 3–6 tháng vì còn lịch tour và thủ tục nhập cảnh.",
     fq3:"Haustek lo trọn gói hay chỉ phần nhạc?",
     fa3:"Trọn gói được: line-up, âm thanh, ánh sáng, visual, truyền thông, quay phim. Bạn có sẵn phần nào thì Haustek chỉ làm phần còn thiếu.",
     fq4:"Chi phí thế nào?",
@@ -1097,6 +1141,7 @@ const I18N={
     openYT:"Open on YouTube",
     hl_k:"International headliners",
     hl_h:'<span class="ln">The nights</span> <span class="ln"><em>people still talk about.</em></span>',
+    hl_bb:"Opened the Canadian rapper's first-ever Asia tour in Saigon, two weeks before the album bag or die came out. Brought over by Haustek.",
     hl_1:"Boiler Room picked Saigon — Haustek co-promoted, 18 artists over two days at Khu 13.",
     hl_2:"Their first time in Saigon, on the Asia tour for Mosaiik 2.",
     hl_3:"The launch night for Mixmag Asia Vietnam.",
@@ -1127,7 +1172,7 @@ const I18N={
     fq1:"What kinds of events does Haustek run?",
     fa1:"Club nights, label nights, festival stages, brand events and livestreams.",
     fq2:"Can you book international artists?",
-    fa2:"Yes. Cosmic Gate, Nick Warren, Ben Böhmer, Xhin… were all brought over by Haustek. Plan 3–6 months ahead for tour schedules and visas.",
+    fa2:"Yes. bbno$, Cosmic Gate, Nick Warren, Ben Böhmer, Xhin… were all brought over by Haustek. Plan 3–6 months ahead for tour schedules and visas.",
     fq3:"Do you handle everything, or only the music?",
     fa3:"Everything if you need it: lineup, sound, lighting, visuals, promotion, filming. If you already have some of it, we fill only the gaps.",
     fq4:"What does it cost?",
@@ -1272,7 +1317,8 @@ ytModal.addEventListener('click',e=>{ if(e.target===ytModal) closeVideo(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape' && ytModal.classList.contains('on')) closeVideo(); });
 
 /* ===================== ĐƯỜNG HẦM 3D =====================
-   12 poster đầu bảng (đã xếp từ mới tới cũ trong HTML) đặt lùi sâu dần
+   13 poster đầu bảng (bbno$ đứng đầu, còn lại xếp từ mới tới cũ trong
+   HTML) đặt lùi sâu dần
    theo trục Z, so le trái phải, xen giữa là các vòng sóng. Khung dính
    cao bằng màn hình; cuộn trang = đẩy camera tiến tới, nên người xem như
    bay ngược thời gian từ đêm mới nhất về đêm cũ nhất. Góc dưới đếm poster
